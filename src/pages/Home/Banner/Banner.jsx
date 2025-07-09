@@ -7,7 +7,7 @@ import { Carousel } from "react-responsive-carousel";
 
 const Banner = () => {
   return (
-    <Carousel
+    <Carousel className="mt-5"
       autoPlay={true}
       infiniteLoop={true}
       interval={4000}
