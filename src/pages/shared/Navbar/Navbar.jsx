@@ -20,6 +20,7 @@ const Navbar = () => {
     const navItems = <>
     <li><NavLink to ="/">Home</NavLink></li>
     <li><NavLink to ="/aboutUs">About Us</NavLink></li>
+
     <li><NavLink to ="/availableCamps">Available Camps</NavLink></li>
     </>
     return (
@@ -60,12 +61,16 @@ const Navbar = () => {
                 {user.displayName || "Anonymous"}
               </div>
             </div>
+            <button className='btn text-blue-800 bg-purple-200'>
+              <NavLink to ="/dashboard">My DashBoard</NavLink>
+            </button>
             <button
               onClick={handleSignOut}
               className="btn text-white bg-red-700 ml-2"
             >
               SignOut
             </button>
+            
           </>
         )  : (
           <>

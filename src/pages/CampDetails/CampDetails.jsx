@@ -28,8 +28,23 @@ const CampDetails = () => {
     }));
   };
 
-  const handleJoin = async e => {
-    e.preventDefault();
+const handleJoin = async e => {
+  e.preventDefault();
+
+  if (!user) {
+    Swal.fire('Unauthorized', 'Please login to join the camp.', 'warning');
+    return;
+  }
+
+  try {
+    // 🟡 Check if the user already joined this camp
+    const existingRes = await axiosSecure.get(`/participants?email=${user.email}`);
+    const alreadyJoined = existingRes.data.find(p => String(p.campId) === String(camp._id));
+
+    if (alreadyJoined) {
+      Swal.fire('Already Joined', 'You have already registered for this camp.', 'info');
+      return;
+    }
 
     const participantData = {
       campId: camp._id,
@@ -43,18 +58,15 @@ const CampDetails = () => {
     };
 
     try {
-      
       const res = await axiosSecure.post('/participants', participantData);
 
       if (res.data.insertedId) {
-        
         await axiosSecure.patch(`/camps/increment/${camp._id}`);
 
         Swal.fire('Joined!', 'You have successfully joined the camp.', 'success');
         setShowModal(false);
         setFormData({ age: '', phone: '', gender: '', emergencyContact: '' });
 
-        
         const updated = await axiosSecure.get(`/camps/${campId}`);
         setCamp(updated.data);
       }
@@ -62,7 +74,17 @@ const CampDetails = () => {
       console.error(error);
       Swal.fire('Error', 'Could not join the camp.', 'error');
     }
-  };
+
+  } catch (error) {
+    console.error(error);
+    Swal.fire('Error', 'An unexpected error occurred.', 'error');
+  }
+};
+
+
+
+
+
 
   if (!camp) return <div className="text-center py-20">Loading...</div>;
 
@@ -77,9 +99,20 @@ const CampDetails = () => {
       <p><strong>Participants:</strong> {camp.participantCount}</p>
       <p className="mt-2 text-gray-700">{camp.description}</p>
 
-      <button className="btn btn-primary mt-6" onClick={() => setShowModal(true)}>
-        Join Camp
-      </button>
+      <button
+  className="btn btn-primary mt-6"
+  onClick={() => {
+    if (!user) {
+      // redirect to login
+      window.location.href = "/login";
+    } else {
+      setShowModal(true);
+    }
+  }}
+>
+  Join Camp
+</button>
+
 
       {/* Modal */}
       {showModal && (
