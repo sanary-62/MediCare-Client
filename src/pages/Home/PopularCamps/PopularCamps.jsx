@@ -40,7 +40,7 @@ const PopularCamps = () => {
         {popularCamps.map((camp) => (
           <div
             key={camp._id}
-            className="card bg-base-100 shadow-lg border border-gray-400 rounded-lg overflow-hidden"
+            className="card bg-base-100 shadow-lg border border-gray-200 rounded-lg overflow-hidden"
           >
             <figure>
               <img

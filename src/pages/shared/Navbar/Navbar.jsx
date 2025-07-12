@@ -19,7 +19,7 @@ const Navbar = () => {
 
     const navItems = <>
     <li><NavLink to ="/">Home</NavLink></li>
-    <li><NavLink to ="/about">About Us</NavLink></li>
+    <li><NavLink to ="/aboutUs">About Us</NavLink></li>
     <li><NavLink to ="/availableCamps">Available Camps</NavLink></li>
     </>
     return (

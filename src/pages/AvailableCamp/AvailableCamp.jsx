@@ -106,7 +106,7 @@ const AvailableCamp = () => {
       
       <div className={`grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-${layoutCols}`}>
         {filteredCamps.map((camp) => (
-          <div key={camp._id} className="card bg-base-100 shadow-md border">
+          <div key={camp._id} className="card bg-base-100 shadow-md border border-gray-200">
             <figure>
               <img
                 src={camp.image}

@@ -1,6 +1,4 @@
-import {
-  createBrowserRouter,
-} from "react-router";
+import { createBrowserRouter } from "react-router";
 import RootLayout from "../layouts/RootLayout";
 import Home from "../pages/Home/Home/Home";
 import AuthLayout from "../layouts/AuthLayout";
@@ -9,53 +7,53 @@ import Register from "../pages/Auth/Register/Register";
 import AvailableCamp from "../pages/AvailableCamp/AvailableCamp";
 import CampDetails from "../pages/CampDetails/CampDetails";
 import AddCamp from "../pages/AddCamp/AddCamp";
-import PrivateRoute from "../routes/PrivateRoute"; 
-
-
-
+import PrivateRoute from "../routes/PrivateRoute";
+import AboutUs from "../pages/AboutUs/AboutUs";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     Component: RootLayout,
-    children : [
-        {
-            index: true,
-            Component: Home,
-        },
-       {
-  path: 'camp-details/:campId',
-  element: <CampDetails />,
-},
+    children: [
+      {
+        index: true,
+        Component: Home,
+      },
+      {
+        path: "camp-details/:campId",
+        element: <CampDetails />,
+      },
 
-
-        {
-          path: 'availableCamps',
-          Component: AvailableCamp,
-        },
-        {
-  path: 'addCamp',
-  element: (
-    <PrivateRoute>
-      <AddCamp />
-    </PrivateRoute>
-  )
-}
-
-    ]
+      {
+        path: "availableCamps",
+        Component: AvailableCamp,
+      },
+      {
+        path : "aboutUs",
+        Component : AboutUs,
+      },
+      {
+        path: "addCamp",
+        element: (
+          <PrivateRoute>
+            <AddCamp />
+          </PrivateRoute>
+        ),
+      },
+    ],
   },
   {
-    path: '/',
+    path: "/",
     Component: AuthLayout,
     children: [
-        {
-            path: 'login',
-            Component: Login,
-        },
-        {
-            path: 'register',
-            Component: Register,
-        }
-    ]
-  }
+      {
+        path: "login",
+        Component: Login,
+      },
+      {
+        path: "register",
+        Component: Register,
+      },
+    ],
+  },
 ]);
