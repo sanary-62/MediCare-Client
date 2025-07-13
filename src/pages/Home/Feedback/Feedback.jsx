@@ -21,11 +21,11 @@ const Feedback = () => {
       {feedbackList.length === 0 ? (
         <p className="text-center text-gray-500">No feedback submitted yet.</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {feedbackList.map((fb) => (
             <div
               key={fb._id}
-              className="border rounded-lg p-4 shadow-md bg-white"
+              className="border border-gray-200 rounded-lg p-4 shadow-md bg-white"
             >
               <h3 className="text-xl font-semibold text-blue-700">
                 {fb.campName}

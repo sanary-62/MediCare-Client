@@ -1,6 +1,7 @@
 import React from "react";
 import { Outlet } from "react-router";
 import { NavLink } from "react-router-dom";
+import MediCareLogo from "../pages/shared/MediCareLogo/MediCareLogo";
 
 const dashboardItems = (
   <>
@@ -40,7 +41,10 @@ const DashboardLayout = () => {
               </svg>
             </label>
           </div>
-          <div className="mx-2 flex-1 px-2 lg:hidden">Dashboard</div>
+          <NavLink to="/" className="w-fit">
+  <MediCareLogo />
+</NavLink>
+
         </div>
         {/* Page content here */}
         <Outlet></Outlet>
@@ -51,8 +55,12 @@ const DashboardLayout = () => {
           aria-label="close sidebar"
           className="drawer-overlay"
         ></label>
-        <ul className="menu bg-base-200 min-h-full w-80 p-4 text-xl font-bold text-sky-800">
+        <ul className="menu bg-base-200 min-h-full w-80 p-4 text-xl font-bold text-sky-800 mt-2">
           {/* Sidebar content here */}
+          <NavLink to="/" className="w-fit">
+  <MediCareLogo />
+</NavLink>
+
           {dashboardItems}
         </ul>
       </div>

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router";
 
 const RegisteredCamps = () => {
   const { user } = useAuth();
@@ -14,6 +15,7 @@ const RegisteredCamps = () => {
   const [currentFeedbackCamp, setCurrentFeedbackCamp] = useState(null); // {campName, participantId, campImage}
   const [feedbackText, setFeedbackText] = useState("");
   const [rating, setRating] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user?.email) {
@@ -79,6 +81,7 @@ const RegisteredCamps = () => {
   const handlePayment = async (id) => {
     try {
       const transactionId = "txn_" + Math.random().toString(36).substr(2, 9);
+      navigate (`/dashboard/payment/${id}`)
 
       await Swal.fire(
         "Payment Successful",

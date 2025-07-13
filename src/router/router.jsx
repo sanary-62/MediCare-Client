@@ -14,7 +14,7 @@ import RegisteredCamps from "../pages/DashBoard/Registered Camps/RegisteredCamps
 import PaymentHistory from "../pages/DashBoard/PaymentHistory/PaymentHistory";
 import Analytics from "../pages/DashBoard/Analytics/Analytics";
 import ParticipantProfile from "../pages/DashBoard/ParticipantProfile/ParticipantProfile";
-
+import Payment from "../pages/DashBoard/Payment/Payment";
 
 export const router = createBrowserRouter([
   {
@@ -35,8 +35,8 @@ export const router = createBrowserRouter([
         Component: AvailableCamp,
       },
       {
-        path : "aboutUs",
-        Component : AboutUs,
+        path: "aboutUs",
+        Component: AboutUs,
       },
       {
         path: "addCamp",
@@ -64,26 +64,32 @@ export const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <PrivateRoute>
-      <DashboardLayout></DashboardLayout>
-    </PrivateRoute>,
+    element: (
+      <PrivateRoute>
+        <DashboardLayout></DashboardLayout>
+      </PrivateRoute>
+    ),
     children: [
       {
         path: "registeredCamps",
         Component: RegisteredCamps,
       },
-{
-  path: "paymentHistory",
-  Component: PaymentHistory,
-},
-{
-  path: "analytics",
-  Component: Analytics,
-},
-{
-  path: "participantProfile",
-  Component: ParticipantProfile,
-}
-    ]
-  }
+      {
+        path: "paymentHistory",
+        Component: PaymentHistory,
+      },
+      {
+        path: "analytics",
+        Component: Analytics,
+      },
+      {
+        path: "participantProfile",
+        Component: ParticipantProfile,
+      },
+      {
+        path: "payment/:id",
+        Component: Payment,
+      },
+    ],
+  },
 ]);

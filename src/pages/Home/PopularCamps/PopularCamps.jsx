@@ -32,9 +32,10 @@ const PopularCamps = () => {
 
   return (
     <section className="max-w-7xl mx-auto px-4 py-12">
-      <h2 className="text-4xl font-bold text-center text-blue-600 mb-10">
+      <h2 className="text-4xl font-bold text-center text-blue-800 mb-6">
         Popular Medical Camps
       </h2>
+      <p className="text-xl font-semibold text-center text-gray-400 mb-10">Explore Events Aimed at Community Wellness</p>
 
       <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {popularCamps.map((camp) => (
@@ -67,6 +68,10 @@ const PopularCamps = () => {
               <p>
                 <strong>Participants:</strong> {camp.participantCount ?? 0}
               </p>
+              <Link to={`/camp-details/${camp._id}`}>
+  <button className="btn btn-sm btn-primary mt-3">View Details</button>
+</Link>
+
             </div>
           </div>
         ))}
