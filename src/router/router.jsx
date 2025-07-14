@@ -87,7 +87,7 @@ export const router = createBrowserRouter([
         Component: ParticipantProfile,
       },
       {
-        path: "payment/:id",
+        path: "payment/:campId",
         Component: Payment,
       },
     ],
