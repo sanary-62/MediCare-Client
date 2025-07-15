@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 const RegisteredCamps = () => {
   const { user } = useAuth();
@@ -141,12 +141,12 @@ const RegisteredCamps = () => {
                         Paid
                       </button>
                     ) : (
-                      <button
-                        className="btn btn-sm btn-primary"
-                        onClick={() => handlePayment(item._id)}
-                      >
-                        Pay
-                      </button>
+                     
+                      <Link to={`/dashboard/payment/${item.campId}`}>
+
+  <button className="btn btn-sm btn-success bg-blue-700 text-white">Pay</button>
+</Link>
+
                     )}
                   </td>
                   <td
