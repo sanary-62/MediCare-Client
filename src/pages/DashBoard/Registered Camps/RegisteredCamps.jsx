@@ -12,7 +12,7 @@ const RegisteredCamps = () => {
   const [registeredCamps, setRegisteredCamps] = useState([]);
 
   const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
-  const [currentFeedbackCamp, setCurrentFeedbackCamp] = useState(null); // {campName, participantId, campImage}
+  const [currentFeedbackCamp, setCurrentFeedbackCamp] = useState(null); 
   const [feedbackText, setFeedbackText] = useState("");
   const [rating, setRating] = useState(0);
   const navigate = useNavigate();

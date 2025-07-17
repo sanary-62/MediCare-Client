@@ -6,15 +6,38 @@ const SocialLogin = () => {
 
 const {signInWithGoogle} = useAuth ();
   const navigate = useNavigate();
+  const axiosInstance = useAxios();
+
+
+
+
+
 const handleGoogleSignIn = () => {
 signInWithGoogle()
-.then (result =>{
-    console.log (result.user)
+.then (async(result) =>{
+    const user = result.user;
+    console.log (result.user);
+
+
+const userInfo = {
+  email: user.email,
+  photo: user.photo,
+  role: 'user',
+  created_at: new Date().toISOString(),
+  last_login: new Date().toISOString()
+};
+
+const res = await axiosInstance.post('/users', userInfo);
+console.log('user update info' ,res.data);
+
+
+
     navigate('/');
 })
 .catch (error => {
     console.error(error);
 })
+
 }
 
     return (

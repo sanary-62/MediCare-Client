@@ -2,14 +2,26 @@ import React from "react";
 import { Outlet } from "react-router";
 import { NavLink } from "react-router-dom";
 import MediCareLogo from "../pages/shared/MediCareLogo/MediCareLogo";
+import { FaChartBar, FaUser, FaClipboardList, FaMoneyBill, FaHome } from "react-icons/fa"; 
 
 const dashboardItems = (
   <>
-    <NavLink to="/dashboard/analytics">Analytics</NavLink>
-    <NavLink to="/dashboard/participantProfile">Participant Profile</NavLink>
-    <NavLink to="/dashboard/registeredCamps">Registered Camps</NavLink>
-
-    <NavLink to="/dashboard/paymentHistory">Payment History</NavLink>
+  <NavLink to="/" className="flex items-center gap-2">
+      <FaHome className="inline" />
+      Home
+    </NavLink>
+    <NavLink to="/dashboard/analytics">
+      <FaChartBar className="inline mr-2" /> Analytics
+    </NavLink>
+    <NavLink to="/dashboard/participantProfile">
+      <FaUser className="inline mr-2" /> Participant Profile
+    </NavLink>
+    <NavLink to="/dashboard/registeredCamps">
+      <FaClipboardList className="inline mr-2" /> Registered Camps
+    </NavLink>
+    <NavLink to="/dashboard/paymentHistory">
+      <FaMoneyBill className="inline mr-2" /> Payment History
+    </NavLink>
   </>
 );
 
@@ -42,9 +54,8 @@ const DashboardLayout = () => {
             </label>
           </div>
           <NavLink to="/" className="w-fit">
-  <MediCareLogo />
-</NavLink>
-
+            <MediCareLogo />
+          </NavLink>
         </div>
         {/* Page content here */}
         <Outlet></Outlet>
@@ -58,8 +69,8 @@ const DashboardLayout = () => {
         <ul className="menu bg-base-200 min-h-full w-80 p-4 text-xl font-bold text-sky-800 mt-2">
           {/* Sidebar content here */}
           <NavLink to="/" className="w-fit">
-  <MediCareLogo />
-</NavLink>
+            <MediCareLogo />
+          </NavLink>
 
           {dashboardItems}
         </ul>

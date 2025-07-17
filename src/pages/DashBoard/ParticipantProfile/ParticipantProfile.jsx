@@ -16,23 +16,29 @@ const ParticipantProfile = () => {
   });
 
   useEffect(() => {
-    if (user?.email) {
-      axiosSecure
-        .get(`/participants?email=${user.email}`) // make sure your API returns an array here
-        .then((res) => {
-          const data = res.data[0]; // take first participant from array
-          setProfile(data);
-          setFormData({
-            name: data.participantName || "",
-            image: data.image || "",
-            contact: data.contact || ""
-          });
-        })
-        .catch((err) => {
-          console.error("Failed to load profile", err);
+  if (user?.email) {
+    axiosSecure
+      .get(`/participants?email=${user.email}`)
+      .then((res) => {
+        if (!res.data || res.data.length === 0) {
+          console.warn("No participant found for email:", user.email);
+          return; 
+        }
+
+        const data = res.data[0];
+        setProfile(data);
+        setFormData({
+          name: data.participantName || "",
+          image: data.image || "",
+          contact: data.contact || ""
         });
-    }
-  }, [user, axiosSecure]);
+      })
+      .catch((err) => {
+        console.error("Failed to load profile", err);
+      });
+  }
+}, [user, axiosSecure]);
+
 
   const handleUpdateClick = () => setIsEditing(true);
 

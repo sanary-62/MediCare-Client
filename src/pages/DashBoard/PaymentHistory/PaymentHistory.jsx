@@ -28,7 +28,7 @@ const PaymentHistory = () => {
 
       <div className="overflow-x-auto shadow-xl rounded-xl">
         <table className="table table-zebra w-full">
-          <thead className="bg-base-200 text-base-content">
+          <thead className="bg-blue-100 text-blue-800">
             <tr>
               <th>#</th>
               <th>Camp Name</th>
@@ -45,7 +45,7 @@ const PaymentHistory = () => {
                 <td>{payment.campName}</td>
                 <td>${payment.amount}</td>
                 <td>
-                  <span className="badge badge-success text-white">
+                  <span className="badge badge-success text-white bg-green-700">
                     {payment.paymentStatus || 'Paid'}
                   </span>
                 </td>
