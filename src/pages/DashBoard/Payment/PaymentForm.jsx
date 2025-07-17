@@ -7,6 +7,8 @@ import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import { useQuery } from '@tanstack/react-query';
 import useAuth from '../../../hooks/useAuth';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
+
 
 
 const PaymentForm = () => {
@@ -16,6 +18,8 @@ const PaymentForm = () => {
     const {campId} = useParams();
     const {user} = useAuth();
     const axiosSecure = useAxiosSecure();
+const navigate = useNavigate();
+
 
     const [error,setError] = useState('');
 
@@ -97,11 +101,15 @@ if (queryError) {
 
         if (saveRes.data.insertedId) {
           Swal.fire({
-            title: ' Payment Successful!',
-            text: 'Your payment has been recorded successfully.',
-            icon: 'success',
-            confirmButtonText: 'OK'
-          });
+  title: ' Payment Successful!',
+  html: `Transaction ID: <strong>${saveRes.data.transactionId}</strong>`,
+
+  icon: 'success',
+  confirmButtonText: 'Go to My Camps'
+}).then(() => {
+  navigate('/dashboard/registeredCamps');
+});
+
         } else {
           Swal.fire({
             title: ' Payment Saved Failed',
