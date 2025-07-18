@@ -3,14 +3,15 @@ import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from "react-router-dom";
 import useAuth from '../../../hooks/useAuth';
 import SocialLogin from '../SocialLogin/SocialLogin';
-import useAxios from '../../../hooks/useAxios'; 
+import useAxiosSecure from '../../../hooks/useAxios';
+ 
 import { getAuth, onAuthStateChanged } from 'firebase/auth'; 
 
 const Register = () => {
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { createUser } = useAuth();
-  const axiosInstance = useAxios();
+ const axiosInstance = useAxiosSecure();
 
   const onSubmit = async (data) => {
     console.log(data);

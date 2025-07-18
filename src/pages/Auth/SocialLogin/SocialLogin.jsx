@@ -1,12 +1,15 @@
 import React from 'react';
 import useAuth from '../../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import useAxiosSecure from '../../../hooks/useAxios';
+
 
 const SocialLogin = () => {
 
 const {signInWithGoogle} = useAuth ();
   const navigate = useNavigate();
-  const axiosInstance = useAxios();
+ const axiosInstance = useAxiosSecure();
+
 
 
 

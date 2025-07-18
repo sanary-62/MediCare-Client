@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
@@ -12,7 +10,7 @@ const RegisteredCamps = () => {
   const [registeredCamps, setRegisteredCamps] = useState([]);
 
   const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
-  const [currentFeedbackCamp, setCurrentFeedbackCamp] = useState(null); 
+  const [currentFeedbackCamp, setCurrentFeedbackCamp] = useState(null);
   const [feedbackText, setFeedbackText] = useState("");
   const [rating, setRating] = useState(0);
   const navigate = useNavigate();
@@ -59,7 +57,11 @@ const RegisteredCamps = () => {
       return;
     }
     if (rating < 1 || rating > 5) {
-      Swal.fire("Validation Error", "Please select a rating between 1 and 5.", "warning");
+      Swal.fire(
+        "Validation Error",
+        "Please select a rating between 1 and 5.",
+        "warning"
+      );
       return;
     }
     try {
@@ -81,7 +83,7 @@ const RegisteredCamps = () => {
   const handlePayment = async (id) => {
     try {
       const transactionId = "txn_" + Math.random().toString(36).substr(2, 9);
-      navigate (`/dashboard/payment/${id}`)
+      navigate(`/dashboard/payment/${id}`);
 
       await Swal.fire(
         "Payment Successful",
@@ -141,12 +143,11 @@ const RegisteredCamps = () => {
                         Paid
                       </button>
                     ) : (
-                     
                       <Link to={`/dashboard/payment/${item.campId}`}>
-
-  <button className="btn btn-sm btn-success bg-blue-700 text-white">Pay</button>
-</Link>
-
+                        <button className="btn btn-sm btn-success bg-blue-700 text-white">
+                          Pay
+                        </button>
+                      </Link>
                     )}
                   </td>
                   <td
@@ -163,7 +164,11 @@ const RegisteredCamps = () => {
                       <button
                         className="btn btn-sm btn-outline btn-info"
                         onClick={() =>
-                          handleFeedback(item.campName, item._id, item.campImage)
+                          handleFeedback(
+                            item.campName,
+                            item._id,
+                            item.campImage
+                          )
                         }
                       >
                         Feedback
