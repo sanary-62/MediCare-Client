@@ -15,6 +15,7 @@ import PaymentHistory from "../pages/DashBoard/PaymentHistory/PaymentHistory";
 import Analytics from "../pages/DashBoard/Analytics/Analytics";
 import ParticipantProfile from "../pages/DashBoard/ParticipantProfile/ParticipantProfile";
 import Payment from "../pages/DashBoard/Payment/Payment";
+import BeAOrganizer from "../pages/DashBoard/BeAOrganizer/BeAOrganizer";
 
 export const router = createBrowserRouter([
   {
@@ -37,6 +38,14 @@ export const router = createBrowserRouter([
       {
         path: "aboutUs",
         Component: AboutUs,
+      },
+      {
+        path: "beAOrganizer",
+        element: (
+          <PrivateRoute>
+            <BeAOrganizer />
+          </PrivateRoute>
+        )
       },
       {
         path: "addCamp",

@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import useAuth from '../../hooks/useAuth';
 import Swal from 'sweetalert2';
+import { useForm } from 'react-hook-form';
 
 const CampDetails = () => {
   const { campId } = useParams();
@@ -10,54 +11,51 @@ const CampDetails = () => {
   const { user } = useAuth();
   const [camp, setCamp] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [formData, setFormData] = useState({
-    age: '',
-    phone: '',
-    gender: '',
-    emergencyContact: ''
-  });
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm();
 
   useEffect(() => {
     axiosSecure.get(`/camps/${campId}`).then(res => setCamp(res.data));
   }, [axiosSecure, campId]);
 
-  const handleChange = e => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
-  };
-
-const handleJoin = async e => {
-  e.preventDefault();
-
-  if (!user) {
-    Swal.fire('Unauthorized', 'Please login to join the camp.', 'warning');
-    return;
-  }
-
-  try {
-    // 🟡 Check if the user already joined this camp
-    const existingRes = await axiosSecure.get(`/participants?email=${user.email}`);
-    const alreadyJoined = existingRes.data.find(p => String(p.campId) === String(camp._id));
-
-    if (alreadyJoined) {
-      Swal.fire('Already Joined', 'You have already registered for this camp.', 'info');
+  const handleJoin = async (data) => {
+    if (!user) {
+      Swal.fire('Unauthorized', 'Please login to join the camp.', 'warning');
       return;
     }
 
-    const participantData = {
-      campId: camp._id,
-      campName: camp.campName,
-      fees: camp.fees,
-      location: camp.location,
-      healthcareProfessional: camp.healthcareProfessional,
-      participantName: user?.displayName,
-      participantEmail: user?.email,
-      ...formData
-    };
+    // Extra client-side age validation (react-hook-form validation runs first)
+    const ageNum = Number(data.age);
+    if (ageNum < 15) {
+      Swal.fire('Invalid Age', 'You must be at least 15 years old.', 'error');
+      return;
+    }
 
     try {
+      const existingRes = await axiosSecure.get(`/participants?email=${user.email}`);
+      const alreadyJoined = existingRes.data.find(p => String(p.campId) === String(camp._id));
+
+      if (alreadyJoined) {
+        Swal.fire('Already Joined', 'You have already registered for this camp.', 'info');
+        return;
+      }
+
+      const participantData = {
+        campId: camp._id,
+        campName: camp.campName,
+        fees: camp.fees,
+        location: camp.location,
+        healthcareProfessional: camp.healthcareProfessional,
+        participantName: user?.displayName,
+        participantEmail: user?.email,
+        ...data
+      };
+
       const res = await axiosSecure.post('/participants', participantData);
 
       if (res.data.insertedId) {
@@ -65,7 +63,7 @@ const handleJoin = async e => {
 
         Swal.fire('Joined!', 'You have successfully joined the camp.', 'success');
         setShowModal(false);
-        setFormData({ age: '', phone: '', gender: '', emergencyContact: '' });
+        reset();
 
         const updated = await axiosSecure.get(`/camps/${campId}`);
         setCamp(updated.data);
@@ -74,17 +72,7 @@ const handleJoin = async e => {
       console.error(error);
       Swal.fire('Error', 'Could not join the camp.', 'error');
     }
-
-  } catch (error) {
-    console.error(error);
-    Swal.fire('Error', 'An unexpected error occurred.', 'error');
-  }
-};
-
-
-
-
-
+  };
 
   if (!camp) return <div className="text-center py-20">Loading...</div>;
 
@@ -100,26 +88,23 @@ const handleJoin = async e => {
       <p className="mt-2 text-gray-700">{camp.description}</p>
 
       <button
-  className="btn btn-primary mt-6"
-  onClick={() => {
-    if (!user) {
-      // redirect to login
-      window.location.href = "/login";
-    } else {
-      setShowModal(true);
-    }
-  }}
->
-  Join Camp
-</button>
+        className="btn btn-primary mt-6"
+        onClick={() => {
+          if (!user) {
+            window.location.href = "/login";
+          } else {
+            setShowModal(true);
+          }
+        }}
+      >
+        Join Camp
+      </button>
 
-
-      {/* Modal */}
       {showModal && (
         <dialog open className="modal modal-bottom sm:modal-middle">
           <div className="modal-box">
             <h3 className="font-bold text-lg mb-2">Join {camp.campName}</h3>
-            <form onSubmit={handleJoin} className="space-y-3">
+            <form onSubmit={handleSubmit(handleJoin)} className="space-y-3">
 
               <input type="text" value={camp.campName} disabled className="input input-bordered w-full" />
               <input type="text" value={camp.fees} disabled className="input input-bordered w-full" />
@@ -129,53 +114,82 @@ const handleJoin = async e => {
               <input type="text" value={user?.displayName} disabled className="input input-bordered w-full" />
               <input type="email" value={user?.email} disabled className="input input-bordered w-full" />
 
-              <input
-                type="number"
-                name="age"
-                placeholder="Your Age"
-                required
-                className="input input-bordered w-full"
-                value={formData.age}
-                onChange={handleChange}
-              />
-              <input
-  type="tel"
-  name="phone"
-  placeholder="Phone Number"
-  required
-  className="input input-bordered w-full"
-  value={formData.phone}
-  onChange={handleChange}
-  pattern="01[0-9]{9}"
-  maxLength={11}
-/>
-              <select
-                name="gender"
-                required
-                className="select select-bordered w-full"
-                value={formData.gender}
-                onChange={handleChange}
-              >
-                <option value="" disabled>Select Gender</option>
-                <option>Male</option>
-                <option>Female</option>
-                <option>Other</option>
-              </select>
-              <input
-  type="tel"
-  name="emergencyContact"
-  placeholder="Emergency Contact"
-  required
-  className="input input-bordered w-full"
-  value={formData.emergencyContact}
-  onChange={handleChange}
-  pattern="01[0-9]{9}"
-  maxLength={11}
-/>
+              <div>
+                <label className="label font-medium">Age</label>
+                <input
+                  type="number"
+                  {...register("age", {
+                    required: "Age is required",
+                    validate: value => {
+                      const num = Number(value);
+                      if (isNaN(num)) return "Age must be a number";
+                      if (num < 15) return "You must be at least 15 years old";
+                      return true;
+                    }
+                  })}
+                  placeholder="Enter your age"
+                  className="input input-bordered w-full"
+                />
+                {errors.age && <span className="text-red-500 text-sm">{errors.age.message}</span>}
+              </div>
+
+              <div>
+                <label className="label font-medium">Phone Number</label>
+                <input
+                  type="tel"
+                  {...register("phone", {
+                    required: "Phone number is required",
+                    pattern: {
+                      value: /^01[0-9]{9}$/,
+                      message: "Phone number must be valid and start with 01"
+                    }
+                  })}
+                  placeholder="01XXXXXXXXX"
+                  className="input input-bordered w-full"
+                  maxLength={11}
+                />
+                {errors.phone && <span className="text-red-500 text-sm">{errors.phone.message}</span>}
+              </div>
+
+              <div>
+                <label className="label font-medium">Gender</label>
+                <select
+                  {...register("gender", { required: "Gender is required" })}
+                  className="select select-bordered w-full"
+                  defaultValue=""
+                >
+                  <option value="" disabled>Select Gender</option>
+                  <option>Male</option>
+                  <option>Female</option>
+                  <option>Other</option>
+                </select>
+                {errors.gender && <span className="text-red-500 text-sm">{errors.gender.message}</span>}
+              </div>
+
+              <div>
+                <label className="label font-medium">Emergency Contact</label>
+                <input
+                  type="tel"
+                  {...register("emergencyContact", {
+                    required: "Emergency contact is required",
+                    pattern: {
+                      value: /^01[0-9]{9}$/,
+                      message: "Emergency contact must be valid and start with 01"
+                    }
+                  })}
+                  placeholder="01XXXXXXXXX"
+                  className="input input-bordered w-full"
+                  maxLength={11}
+                />
+                {errors.emergencyContact && <span className="text-red-500 text-sm">{errors.emergencyContact.message}</span>}
+              </div>
 
               <div className="modal-action">
-                <button type="submit" className="btn btn-success text-white bg-sky-700 ">Submit</button>
-                <button type="button" className="btn" onClick={() => setShowModal(false)}>Cancel</button>
+                <button type="submit" className="btn btn-success text-white bg-sky-700">Submit</button>
+                <button type="button" className="btn" onClick={() => {
+                  setShowModal(false);
+                  reset();
+                }}>Cancel</button>
               </div>
             </form>
           </div>
