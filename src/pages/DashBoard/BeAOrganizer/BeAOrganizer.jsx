@@ -1,6 +1,8 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import useAuth from '../../../hooks/useAuth';
+import Swal from 'sweetalert2';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 const bangladeshDistricts = [
   'Dhaka', 'Chattogram', 'Rajshahi', 'Khulna', 'Barishal',
@@ -12,17 +14,29 @@ const BeAOrganizer = () => {
   const { user } = useAuth();
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
-  const onSubmit = data => {
-    const organizerInfo = {
-      name: user?.displayName || '',
-      email: user?.email || '',
-      ...data,
-    };
+  const axiosSecure = useAxiosSecure();
 
-    console.log('Organizer Application:', organizerInfo);
-    // send to backend if needed
-    reset();
+  const onSubmit = data => {
+  const organizerInfo = {
+    name: user?.displayName || '',
+    email: user?.email || '',
+    ...data,
   };
+
+  console.log('Organizer Application:', organizerInfo);
+
+  axiosSecure.post ('/organizers',organizerInfo)
+  .then (res => {
+    if(res.data.insertedId) {
+        Swal.fire('Submitted!', 'Your application has been submitted successfully.', 'success');
+    }
+  })
+
+ 
+
+  reset();
+};
+
 
   return (
     <div className="max-w-xl mx-auto p-6 bg-base-200 rounded-xl shadow-lg mt-10 mb-10">
@@ -113,7 +127,7 @@ const BeAOrganizer = () => {
         </div>
 
         <div className="text-center">
-          <button type="submit" className="btn btn-primary px-10">
+          <button type="submit" className="btn btn-primary px-10 w-full">
             Submit Application
           </button>
         </div>

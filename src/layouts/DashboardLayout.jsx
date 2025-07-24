@@ -2,7 +2,7 @@ import React from "react";
 import { Outlet } from "react-router";
 import { NavLink } from "react-router-dom";
 import MediCareLogo from "../pages/shared/MediCareLogo/MediCareLogo";
-import { FaChartBar, FaUser, FaClipboardList, FaMoneyBill, FaHome } from "react-icons/fa"; 
+import { FaChartBar, FaUser, FaClipboardList, FaMoneyBill, FaHome, FaUsers, FaHourglassHalf } from "react-icons/fa"; 
 
 const dashboardItems = (
   <>
@@ -22,6 +22,20 @@ const dashboardItems = (
     <NavLink to="/dashboard/paymentHistory">
       <FaMoneyBill className="inline mr-2" /> Payment History
     </NavLink>
+    
+
+    {/* organizers links */}
+
+
+
+    <NavLink to="/dashboard/activeOrganizers" className="flex items-center gap-2">
+  <FaUsers className="inline mr-2" /> Active Organizers
+</NavLink>
+
+<NavLink to="/dashboard/pendingOrganizers" className="flex items-center gap-2">
+  <FaHourglassHalf className="inline mr-2" /> Pending Organizers
+</NavLink>
+
   </>
 );
 

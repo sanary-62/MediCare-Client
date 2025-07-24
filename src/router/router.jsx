@@ -16,6 +16,7 @@ import Analytics from "../pages/DashBoard/Analytics/Analytics";
 import ParticipantProfile from "../pages/DashBoard/ParticipantProfile/ParticipantProfile";
 import Payment from "../pages/DashBoard/Payment/Payment";
 import BeAOrganizer from "../pages/DashBoard/BeAOrganizer/BeAOrganizer";
+import PendingOrganizers from "../pages/DashBoard/PendingOrganizers/PendingOrganizers";
 
 export const router = createBrowserRouter([
   {
@@ -99,6 +100,10 @@ export const router = createBrowserRouter([
         path: "payment/:campId",
         Component: Payment,
       },
+      {
+        path: "pendingOrganizers",
+        Component: PendingOrganizers,
+      }
     ],
   },
 ]);
