@@ -13,12 +13,12 @@ const PendingOrganizers = () => {
       .catch(err => console.error(err));
   }, [axiosSecure]);
 
-  const handleDecision = (id, status) => {
+  const handleDecision = (id, status, email) => {
     Swal.fire({
       title: `Are you sure to ${status} this organizer?`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: `Yes, ${status}`,
+      confirmButtonText: `Yes, ${status}`, email
     }).then(result => {
       if (result.isConfirmed) {
         axiosSecure.patch(`/organizers/${id}`, { status })
@@ -58,8 +58,8 @@ const PendingOrganizers = () => {
                 <td>{org.phone}</td>
                 <td className="flex gap-2 justify-center">
                   <button className="btn bg-blue-700 text-white btn-sm btn-info" onClick={() => setSelectedOrganizer(org)}>View</button>
-                  <button className="btn btn-sm text-white bg-green-700 btn-success" onClick={() => handleDecision(org._id, 'active')}>Accept</button>
-                  <button className="btn btn-sm text-white bg-red-700 btn-error" onClick={() => handleDecision(org._id, 'cancelled')}>Cancel</button>
+                  <button className="btn btn-sm text-white bg-green-700 btn-success" onClick={() => handleDecision(org._id, 'accept', org.email)}>Accept</button>
+                  <button className="btn btn-sm text-white bg-red-700 btn-error" onClick={() => handleDecision(org._id, 'cancelled', org.email)}>Cancel</button>
                 </td>
               </tr>
             ))}

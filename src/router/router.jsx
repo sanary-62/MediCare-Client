@@ -17,11 +17,15 @@ import ParticipantProfile from "../pages/DashBoard/ParticipantProfile/Participan
 import Payment from "../pages/DashBoard/Payment/Payment";
 import BeAOrganizer from "../pages/DashBoard/BeAOrganizer/BeAOrganizer";
 import PendingOrganizers from "../pages/DashBoard/PendingOrganizers/PendingOrganizers";
+import ActiveOrganizers from "../pages/DashBoard/ActiveOrganizers/ActiveOrganizers";
+import Error from "../pages/Error/Error"
+import ManageAdmin from "../pages/DashBoard/ManageAdmin/ManageAdmin";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     Component: RootLayout,
+    errorElement: <Error />,
     children: [
       {
         index: true,
@@ -61,6 +65,7 @@ export const router = createBrowserRouter([
   {
     path: "/",
     Component: AuthLayout,
+    errorElement: <Error />,
     children: [
       {
         path: "login",
@@ -70,6 +75,7 @@ export const router = createBrowserRouter([
         path: "register",
         Component: Register,
       },
+      
     ],
   },
   {
@@ -79,6 +85,7 @@ export const router = createBrowserRouter([
         <DashboardLayout></DashboardLayout>
       </PrivateRoute>
     ),
+    errorElement: <Error />,
     children: [
       {
         path: "registeredCamps",
@@ -103,6 +110,14 @@ export const router = createBrowserRouter([
       {
         path: "pendingOrganizers",
         Component: PendingOrganizers,
+      },
+      {
+        path: "activeOrganizers",
+        Component: ActiveOrganizers,
+      },
+      {
+        path: "manageAdmin",
+        Component: ManageAdmin,
       }
     ],
   },

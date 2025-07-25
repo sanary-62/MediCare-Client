@@ -2,7 +2,7 @@ import React from "react";
 import { Outlet } from "react-router";
 import { NavLink } from "react-router-dom";
 import MediCareLogo from "../pages/shared/MediCareLogo/MediCareLogo";
-import { FaChartBar, FaUser, FaClipboardList, FaMoneyBill, FaHome, FaUsers, FaHourglassHalf } from "react-icons/fa"; 
+import { FaChartBar, FaUser, FaClipboardList, FaMoneyBill, FaHome, FaUsers, FaHourglassHalf, FaUserShield } from "react-icons/fa"; 
 
 const dashboardItems = (
   <>
@@ -35,6 +35,13 @@ const dashboardItems = (
 <NavLink to="/dashboard/pendingOrganizers" className="flex items-center gap-2">
   <FaHourglassHalf className="inline mr-2" /> Pending Organizers
 </NavLink>
+
+{/* admin links */}
+
+<NavLink to="/dashboard/manageAdmin">
+  <FaUserShield className="inline mr-2" /> Manage Admin
+</NavLink>
+
 
   </>
 );
