@@ -2,51 +2,61 @@ import React from "react";
 import { Outlet } from "react-router";
 import { NavLink } from "react-router-dom";
 import MediCareLogo from "../pages/shared/MediCareLogo/MediCareLogo";
-import { FaChartBar, FaUser, FaClipboardList, FaMoneyBill, FaHome, FaUsers, FaHourglassHalf, FaUserShield } from "react-icons/fa"; 
-
-const dashboardItems = (
-  <>
-  <NavLink to="/" className="flex items-center gap-2">
-      <FaHome className="inline" />
-      Home
-    </NavLink>
-    <NavLink to="/dashboard/analytics">
-      <FaChartBar className="inline mr-2" /> Analytics
-    </NavLink>
-    <NavLink to="/dashboard/participantProfile">
-      <FaUser className="inline mr-2" /> Participant Profile
-    </NavLink>
-    <NavLink to="/dashboard/registeredCamps">
-      <FaClipboardList className="inline mr-2" /> Registered Camps
-    </NavLink>
-    <NavLink to="/dashboard/paymentHistory">
-      <FaMoneyBill className="inline mr-2" /> Payment History
-    </NavLink>
-    
-
-    {/* organizers links */}
-
-
-
-    <NavLink to="/dashboard/activeOrganizers" className="flex items-center gap-2">
-  <FaUsers className="inline mr-2" /> Active Organizers
-</NavLink>
-
-<NavLink to="/dashboard/pendingOrganizers" className="flex items-center gap-2">
-  <FaHourglassHalf className="inline mr-2" /> Pending Organizers
-</NavLink>
-
-{/* admin links */}
-
-<NavLink to="/dashboard/manageAdmin">
-  <FaUserShield className="inline mr-2" /> Manage Admin
-</NavLink>
-
-
-  </>
-);
+import {
+  FaChartBar,
+  FaUser,
+  FaClipboardList,
+  FaMoneyBill,
+  FaHome,
+  FaUsers,
+  FaHourglassHalf,
+  FaUserShield,
+} from "react-icons/fa";
+import useUserRole from "../hooks/useUserRole";
 
 const DashboardLayout = () => {
+  const { role, roleLoading } = useUserRole();
+  console.log(role);
+
+  const dashboardItems = (
+    <>
+      <NavLink to="/" className="flex items-center gap-2">
+        <FaHome className="inline" />
+        Home
+      </NavLink>
+      <NavLink to="/dashboard/analytics">
+        <FaChartBar className="inline mr-2" /> Analytics
+      </NavLink>
+      <NavLink to="/dashboard/participantProfile">
+        <FaUser className="inline mr-2" /> Participant Profile
+      </NavLink>
+      <NavLink to="/dashboard/registeredCamps">
+        <FaClipboardList className="inline mr-2" /> Registered Camps
+      </NavLink>
+      <NavLink to="/dashboard/paymentHistory">
+        <FaMoneyBill className="inline mr-2" /> Payment History
+      </NavLink>
+
+      {/* organizers links */}
+      {!roleLoading && role === "admin" && (
+        <>
+          <NavLink to="/dashboard/activeOrganizers" className="flex items-center gap-2">
+            <FaUsers className="inline mr-2" /> Active Organizers
+          </NavLink>
+
+          <NavLink to="/dashboard/pendingOrganizers" className="flex items-center gap-2">
+            <FaHourglassHalf className="inline mr-2" /> Pending Organizers
+          </NavLink>
+
+          {/* admin links */}
+          <NavLink to="/dashboard/manageAdmin">
+            <FaUserShield className="inline mr-2" /> Manage Admin
+          </NavLink>
+        </>
+      )}
+    </>
+  );
+
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />

@@ -20,6 +20,8 @@ import PendingOrganizers from "../pages/DashBoard/PendingOrganizers/PendingOrgan
 import ActiveOrganizers from "../pages/DashBoard/ActiveOrganizers/ActiveOrganizers";
 import Error from "../pages/Error/Error"
 import ManageAdmin from "../pages/DashBoard/ManageAdmin/ManageAdmin";
+import Forbidden from "../pages/Forbidden/Forbidden";
+import AdminRoute from "../routes/AdminRoute";
 
 export const router = createBrowserRouter([
   {
@@ -61,6 +63,10 @@ export const router = createBrowserRouter([
         ),
       },
     ],
+  },
+  {
+    path: "forbidden",
+    Component: Forbidden,
   },
   {
     path: "/",
@@ -109,15 +115,15 @@ export const router = createBrowserRouter([
       },
       {
         path: "pendingOrganizers",
-        Component: PendingOrganizers,
+        element: <AdminRoute><PendingOrganizers></PendingOrganizers></AdminRoute>
       },
       {
         path: "activeOrganizers",
-        Component: ActiveOrganizers,
+        element: <AdminRoute><ActiveOrganizers></ActiveOrganizers></AdminRoute>
       },
       {
         path: "manageAdmin",
-        Component: ManageAdmin,
+        element: <AdminRoute><ManageAdmin></ManageAdmin></AdminRoute>
       }
     ],
   },

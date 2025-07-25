@@ -53,8 +53,22 @@ onAuthStateChanged(getAuth(), (currentUser) => {
         {errors.name?.type === 'required' && <p className='text-red-600'>Name is required</p>}
 
         <label className="label">Email</label>
-        <input type="email" {...register('email', { required: true })} className="input" placeholder="Email" />
+        <input
+  type="email"
+  {...register('email', {
+    required: true,
+    pattern: {
+      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      message: "Invalid email address"
+    }
+  })}
+  className="input"
+  placeholder="Email"
+/>
+
         {errors.email?.type === 'required' && <p className='text-red-600'>Email is required</p>}
+{errors.email?.type === 'pattern' && <p className='text-red-600'>{errors.email.message}</p>}
+
 
         <label className="label">Photo URL</label> {/* ✅ Photo URL field */}
         <input type="text" {...register('photo', { required: true })} className="input" placeholder="Photo URL" />

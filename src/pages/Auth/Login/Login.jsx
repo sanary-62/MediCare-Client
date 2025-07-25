@@ -1,8 +1,11 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
 import SocialLogin from '../SocialLogin/SocialLogin';
-import { useNavigate } from "react-router-dom";
+import { auth } from "../../../firebase/firebase.init"; 
+import { signInWithEmailAndPassword } from "firebase/auth";
+
 
 
 const Login = () => {
@@ -10,10 +13,24 @@ const Login = () => {
 
     const {register , handleSubmit, formState:{errors}} = useForm();
 
-    const onSubmit = data => {
-        console.log (data);
-         navigate('/');
-    }
+   const onSubmit = async (data) => {
+  const { email, password } = data;
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    console.log("Logged in as:", user.email);
+
+    navigate("/"); // go to home or dashboard
+  } catch (error) {
+    console.error("Login error:", error.message);
+
+    Swal.fire({
+      icon: "error",
+      title: "Login failed",
+      text: error.message,
+    });
+  }
+};
 
     
 
