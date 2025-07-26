@@ -9,6 +9,22 @@ const CampDetails = () => {
   const { campId } = useParams();
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
+  const [profile, setProfile] = useState(null);
+
+useEffect(() => {
+  if (user?.email) {
+    axiosSecure.get(`/participants?email=${user.email}`)
+      .then((res) => {
+        if (res.data && res.data.length > 0) {
+          setProfile(res.data[0]);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to load participant profile", err);
+      });
+  }
+}, [user, axiosSecure]);
+
   const [camp, setCamp] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
@@ -111,7 +127,13 @@ const CampDetails = () => {
               <input type="text" value={camp.location} disabled className="input input-bordered w-full" />
               <input type="text" value={camp.healthcareProfessional} disabled className="input input-bordered w-full" />
 
-              <input type="text" value={user?.displayName} disabled className="input input-bordered w-full" />
+             <input
+  type="text"
+  value={profile?.participantName || profile?.name || user?.displayName || ''}
+  disabled
+  className="input input-bordered w-full"
+/>
+
               <input type="email" value={user?.email} disabled className="input input-bordered w-full" />
 
               <div>

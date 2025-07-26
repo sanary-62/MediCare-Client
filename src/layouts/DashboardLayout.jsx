@@ -11,6 +11,8 @@ import {
   FaUsers,
   FaHourglassHalf,
   FaUserShield,
+  FaPlusCircle,
+  FaUsersCog
 } from "react-icons/fa";
 import useUserRole from "../hooks/useUserRole";
 
@@ -24,6 +26,11 @@ const DashboardLayout = () => {
         <FaHome className="inline" />
         Home
       </NavLink>
+
+
+      {!roleLoading && role === "user" && (
+        <>
+
       <NavLink to="/dashboard/analytics">
         <FaChartBar className="inline mr-2" /> Analytics
       </NavLink>
@@ -36,9 +43,39 @@ const DashboardLayout = () => {
       <NavLink to="/dashboard/paymentHistory">
         <FaMoneyBill className="inline mr-2" /> Payment History
       </NavLink>
+      </>
+      )}
 
       {/* organizers links */}
+      {!roleLoading && role === "organizer" && (
+
+        <>
+        <NavLink to="/dashboard/organizerProfile">
+  <FaUser className="inline mr-2" /> Organizer Profile
+</NavLink>
+
+<NavLink to="/dashboard/addCamp">
+  <FaPlusCircle className="inline mr-2" /> Add A Camp
+</NavLink>
+
+<NavLink to="/dashboard/manageCamps">
+  <FaClipboardList className="inline mr-2" /> Manage Camps
+</NavLink>
+
+<NavLink to="/dashboard/manageRegisteredCamps">
+  <FaUsersCog className="inline mr-2" /> Manage Registered Camps
+</NavLink>
+
+        </>
+      ) }
+
+
+
+
+
+      {/* admin links */}
       {!roleLoading && role === "admin" && (
+
         <>
           <NavLink to="/dashboard/activeOrganizers" className="flex items-center gap-2">
             <FaUsers className="inline mr-2" /> Active Organizers
@@ -48,7 +85,20 @@ const DashboardLayout = () => {
             <FaHourglassHalf className="inline mr-2" /> Pending Organizers
           </NavLink>
 
-          {/* admin links */}
+          <NavLink to="/dashboard/addCamp">
+  <FaPlusCircle className="inline mr-2" /> Add A Camp
+</NavLink>
+
+<NavLink to="/dashboard/manageCamps">
+  <FaClipboardList className="inline mr-2" /> Manage Camps
+</NavLink>
+
+
+<NavLink to="/dashboard/manageRegisteredCamps">
+  <FaUsersCog className="inline mr-2" /> Manage Registered Camps
+</NavLink>
+
+          
           <NavLink to="/dashboard/manageAdmin">
             <FaUserShield className="inline mr-2" /> Manage Admin
           </NavLink>

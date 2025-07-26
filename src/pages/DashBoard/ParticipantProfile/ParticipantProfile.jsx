@@ -27,11 +27,12 @@ const ParticipantProfile = () => {
 
         const data = res.data[0];
         setProfile(data);
-        setFormData({
-          name: data.participantName || "",
-          image: data.image || "",
-          contact: data.contact || ""
-        });
+      setFormData({
+  name: data.name || data.participantName || "",
+  image: data.image || "",
+  contact: data.contact || ""
+});
+
       })
       .catch((err) => {
         console.error("Failed to load profile", err);
@@ -50,17 +51,22 @@ const ParticipantProfile = () => {
     e.preventDefault();
     try {
       const res = await axiosSecure.put(`/participants/${profile._id}`, {
-        participantName: formData.name,
-        image: formData.image,
-        contact: formData.contact
-      });
+  name: formData.name,
+  image: formData.image,
+  contact: formData.contact,
+   email: user.email
+});
+
       if (res.data.modifiedCount > 0) {
-        setProfile((prev) => ({
-          ...prev,
-          participantName: formData.name,
-          image: formData.image,
-          contact: formData.contact
-        }));
+     setProfile((prev) => ({
+  ...prev,
+  name: formData.name,
+  participantName: formData.name,  
+  image: formData.image,
+  contact: formData.contact
+}));
+
+
         Swal.fire("Updated!", "Profile updated successfully.", "success");
         setIsEditing(false);
       }
@@ -81,15 +87,19 @@ const ParticipantProfile = () => {
 
       <div className="flex flex-col items-center mb-6">
         <img
-          src={
-                  user?.photoURL
-                    ? user.photoURL
-                    : "https://i.ibb.co/2kRZKmW/default-avatar.png"
-                }
-          alt={profile.participantName}
-          className="w-24 h-24 rounded-full border-4 border-green-600 mb-3 object-cover"
-        />
-        <p className="text-gray-800 text-xl font-semibold">{profile.participantName}</p>
+  src={
+    profile.image
+      ? profile.image
+      : user?.photoURL
+        ? user.photoURL
+        : "https://i.ibb.co/2kRZKmW/default-avatar.png"
+  }
+  alt={profile.participantName || profile.name}
+  className="w-24 h-24 rounded-full border-4 border-green-600 mb-3 object-cover"
+/>
+
+       <p className="text-gray-800 text-xl font-semibold">{profile.participantName || profile.name}</p>
+
         <p className="text-gray-700">{user.email}</p>
         <p className="text-gray-700">Contact: {profile.contact || "N/A"}</p>
       </div>

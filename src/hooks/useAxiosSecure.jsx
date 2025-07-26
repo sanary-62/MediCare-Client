@@ -1,5 +1,3 @@
-
-
 import axios from 'axios';
 import useAuth from './useAuth';
 import { useNavigate } from 'react-router';
@@ -24,28 +22,38 @@ const useAxiosSecure = () => {
     }
   );
 
-  axiosSecure.interceptors.response.use (res=> {
+  axiosSecure.interceptors.response.use(
+  (res) => {
     return res;
-  }, error => {
-    console.log('inside res interceptors ', error.status);
-    const status = error.status;
-    if (status ===403){
-      navigate('/forbidden');
-    }
-    else if (status === 401){
+  },
+  (error) => {
+    console.log('inside res interceptors ', error.response?.status);
+    const status = error.response?.status;
+    if (status === 403) {
+      navigate('/dashboard');  
+    } else if (status === 401) {
       logout()
-      .then(() =>{
-navigate('/login')
-      })
-     .catch (() => {
-
-     })
+        .then(() => {
+          navigate('/login');
+        })
+        .catch(() => {});
     }
 
     return Promise.reject(error);
-  })
+  }
+);
+
 
   return axiosSecure;
 };
 
 export default useAxiosSecure;
+
+
+
+
+
+
+
+
+

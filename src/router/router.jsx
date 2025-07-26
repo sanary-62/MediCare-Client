@@ -6,7 +6,6 @@ import Login from "../pages/Auth/Login/Login";
 import Register from "../pages/Auth/Register/Register";
 import AvailableCamp from "../pages/AvailableCamp/AvailableCamp";
 import CampDetails from "../pages/CampDetails/CampDetails";
-import AddCamp from "../pages/AddCamp/AddCamp";
 import PrivateRoute from "../routes/PrivateRoute";
 import AboutUs from "../pages/AboutUs/AboutUs";
 import DashboardLayout from "../layouts/DashboardLayout";
@@ -22,6 +21,11 @@ import Error from "../pages/Error/Error"
 import ManageAdmin from "../pages/DashBoard/ManageAdmin/ManageAdmin";
 import Forbidden from "../pages/Forbidden/Forbidden";
 import AdminRoute from "../routes/AdminRoute";
+import AddCamp from "../pages/DashBoard/AddCamp/AddCamp";
+import ManageCamps from "../pages/DashBoard/ManageCamps/ManageCamps";
+import ManageRegisteredCamps from "../pages/DashBoard/ManageRegisteredCamps/ManageRegisteredCamps";
+import UpdateCamp from "../pages/DashBoard/UpdateCamp/UpdateCamp";
+import OrganizerProfile from "../pages/DashBoard/OrganizerProfile/OrganizerProfile";
 
 export const router = createBrowserRouter([
   {
@@ -124,6 +128,26 @@ export const router = createBrowserRouter([
       {
         path: "manageAdmin",
         element: <AdminRoute><ManageAdmin></ManageAdmin></AdminRoute>
+      },
+      {
+      path: "addCamp",
+      element: <PrivateRoute><AddCamp></AddCamp></PrivateRoute>
+      },
+      {
+       path: "organizerProfile",
+      element: <PrivateRoute><OrganizerProfile></OrganizerProfile></PrivateRoute>
+      },
+      {
+      path: "manageCamps",
+      element: <PrivateRoute><ManageCamps></ManageCamps></PrivateRoute>
+      },
+      {
+      path: "update-camp/:campId",
+      element: <PrivateRoute><UpdateCamp></UpdateCamp></PrivateRoute>
+      },
+      {
+      path: "manageRegisteredCamps",
+      element: <PrivateRoute><ManageRegisteredCamps></ManageRegisteredCamps></PrivateRoute>
       }
     ],
   },

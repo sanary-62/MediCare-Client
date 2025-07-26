@@ -10,7 +10,10 @@ const useUserRole = () => {
 
   useEffect(() => {
     const fetchRole = async () => {
-      if (!user?.email || authLoading) return;
+      if (!user?.email || authLoading) {
+        setLoading(false);
+        return;
+      }
 
       try {
         const res = await axiosSecure.get(`/users/search?email=${user.email}`);
@@ -27,8 +30,6 @@ const useUserRole = () => {
   }, [user, authLoading, axiosSecure]);
 
   return { role, roleLoading: loading };
-
-
 };
 
 export default useUserRole;

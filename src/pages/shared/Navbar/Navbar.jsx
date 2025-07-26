@@ -1,11 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from "react"; 
 import { NavLink } from 'react-router-dom';
 import MediCareLogo from '../MediCareLogo/MediCareLogo';
 import useAuth from '../../../hooks/useAuth';
+import useAxiosSecure from '../../../hooks/useAxiosSecure'; 
+
 
 
 const Navbar = () => {
   const { user, logOut } = useAuth(); 
+  const [profileData, setProfileData] = useState(null);
+  const axiosSecure = useAxiosSecure(); 
+
+   useEffect(() => {
+    if (user?.email) {
+      axiosSecure
+        .get(`/participants?email=${user.email}`)
+        .then((res) => {
+          if (res.data && res.data.length > 0) {
+            setProfileData(res.data[0]);
+          }
+        })
+        .catch((err) => {
+          console.error("Failed to fetch user profile for navbar", err);
+        });
+    }
+  }, [user, axiosSecure]);
 
   const handleSignOut = () => {       
     logOut()
@@ -49,18 +68,23 @@ const Navbar = () => {
           <>
             <div className="relative group">
               <img
-                src={
-                  user?.photoURL
-                    ? user.photoURL
-                    : "https://i.ibb.co/2kRZKmW/default-avatar.png"
-                }
-                alt="Profile"
-                className="w-10 h-10 min-w-10 rounded-full border-2 border-blue-500 cursor-pointer"
-              />
+  src={
+    profileData?.image
+      ? profileData.image
+      : user?.photoURL
+        ? user.photoURL
+        : "https://i.ibb.co/2kRZKmW/default-avatar.png"
+  }
+  alt="Profile"
+  className="w-10 h-10 min-w-10 rounded-full border-2 border-blue-500 cursor-pointer"
+/>
 
-              <div className="absolute top-12 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded hidden group-hover:block whitespace-nowrap z-10">
-                {user.displayName || "Anonymous"}
-              </div>
+<div className="absolute top-12 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded hidden group-hover:block whitespace-nowrap z-10">
+ {profileData?.name || profileData?.participantName || user?.displayName || "Anonymous"}
+
+
+</div>
+
             </div>
             <button className='btn text-blue-800 bg-purple-200'>
               <NavLink to ="/dashboard">My DashBoard</NavLink>

@@ -52,7 +52,9 @@ const PendingOrganizers = () => {
             {organizers.map((org, index) => (
               <tr key={org._id}>
                 <td>{index + 1}</td>
-                <td>{org.name}</td>
+               <td>{org.participantName?.trim() || org.name?.trim() || 'Anonymous'}</td>
+
+
                 <td>{org.email}</td>
                 <td>{org.region}</td>
                 <td>{org.phone}</td>
@@ -72,7 +74,9 @@ const PendingOrganizers = () => {
         <dialog open className="modal">
           <div className="modal-box max-w-2xl">
             <h3 className="font-bold text-blue-600 text-2xl mb-2">Organizer Details</h3>
-            <p><strong>Name:</strong> {selectedOrganizer.name}</p>
+           <p><strong>Name:</strong> {selectedOrganizer.participantName?.trim() || selectedOrganizer.name?.trim() || 'Anonymous'}</p>
+
+
             <p><strong>Email:</strong> {selectedOrganizer.email}</p>
             <p><strong>Age:</strong> {selectedOrganizer.age}</p>
             <p><strong>Region:</strong> {selectedOrganizer.region}</p>

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
 import { useForm } from 'react-hook-form';
 import useAuth from '../../../hooks/useAuth';
 import Swal from 'sweetalert2';
@@ -15,6 +16,24 @@ const BeAOrganizer = () => {
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
   const axiosSecure = useAxiosSecure();
+
+  const [profile, setProfile] = useState(null);
+
+useEffect(() => {
+  if (user?.email) {
+    axiosSecure
+      .get(`/participants?email=${user.email}`)
+      .then((res) => {
+        if (res.data && res.data.length > 0) {
+          setProfile(res.data[0]);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to fetch participant name", err);
+      });
+  }
+}, [user, axiosSecure]);
+
 
   const onSubmit = data => {
   const organizerInfo = {
@@ -45,11 +64,12 @@ const BeAOrganizer = () => {
         <div>
           <label className="label font-medium">Name</label>
           <input
-            type="text"
-            value={user?.displayName || ''}
-            readOnly
-            className="input input-bordered w-full bg-gray-100 cursor-not-allowed"
-          />
+  type="text"
+  value={profile?.participantName || user?.displayName || ''}
+  readOnly
+  className="input input-bordered w-full bg-gray-100 cursor-not-allowed"
+/>
+
         </div>
 
         <div>
