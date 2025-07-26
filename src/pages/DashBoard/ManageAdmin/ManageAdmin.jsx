@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
+import SearchBar from "../../SearchBar/SearchBar";  
 
 const ManageAdmin = () => {
   const axiosSecure = useAxiosSecure();
@@ -44,15 +45,13 @@ const ManageAdmin = () => {
     <div className="p-6 w-full mx-auto">
       <h2 className="text-4xl font-bold text-blue-700 mb-6 text-center ">Manage Admin</h2>
 
+      {/* Replaced input and button with SearchBar component */}
       <div className="flex items-center gap-2 mb-6 w-96">
-        <input
-          type="email"
+        <SearchBar
+          searchTerm={searchEmail}
+          setSearchTerm={setSearchEmail}
           placeholder="Enter email to search"
-          className="input input-bordered w-full"
-          value={searchEmail}
-          onChange={(e) => setSearchEmail(e.target.value)}
         />
-        <button className="btn btn-primary" onClick={handleSearch}>Search</button>
       </div>
 
       {user && (
@@ -73,11 +72,17 @@ const ManageAdmin = () => {
                 <td>{user.role || "user"}</td>
                 <td>
                   {user.role !== "admin" ? (
-                    <button className="btn btn-sm text-white bg-green-700" onClick={() => handleRoleChange("admin")}>
+                    <button
+                      className="btn btn-sm text-white bg-green-700"
+                      onClick={() => handleRoleChange("admin")}
+                    >
                       Make Admin
                     </button>
                   ) : (
-                    <button className="btn btn-sm text-white bg-red-700" onClick={() => handleRoleChange("user")}>
+                    <button
+                      className="btn btn-sm text-white bg-red-700"
+                      onClick={() => handleRoleChange("user")}
+                    >
                       Remove Admin
                     </button>
                   )}

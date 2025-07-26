@@ -3,11 +3,15 @@ import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import { Link, useNavigate } from "react-router";
+import SearchBar from "../../SearchBar/SearchBar"; 
 
 const RegisteredCamps = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
   const [registeredCamps, setRegisteredCamps] = useState([]);
+
+  // New state for search term
+  const [searchTerm, setSearchTerm] = useState("");
 
   const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
   const [currentFeedbackCamp, setCurrentFeedbackCamp] = useState(null);
@@ -15,14 +19,40 @@ const RegisteredCamps = () => {
   const [rating, setRating] = useState(0);
   const navigate = useNavigate();
 
+  // Pagination state
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const limit = 5; // items per page
+
   useEffect(() => {
     if (user?.email) {
       axiosSecure
-        .get(`/participants?email=${user.email}`)
-        .then((res) => setRegisteredCamps(res.data))
+        .get(`/participants?email=${user.email}&page=${page}&limit=${limit}`)
+        .then((res) => {
+          setRegisteredCamps(res.data.camps);
+          setTotalPages(res.data.totalPages);
+        })
         .catch((err) => console.error("Error fetching registrations", err));
     }
-  }, [user, axiosSecure]);
+  }, [user, axiosSecure, page]);
+
+  // Filter camps by search term
+  const filteredCamps = registeredCamps.filter((camp) => {
+    const term = searchTerm.toLowerCase();
+    const campName = camp.campName?.toLowerCase() || "";
+    const participantName = camp.participantName?.toLowerCase() || "";
+    const campDate = camp.date ? new Date(camp.date).toLocaleDateString() : "";
+    const campDateStr = campDate.toLowerCase();
+    // Assuming healthcareProfessionalName exists
+    const healthcareName = camp.healthcareProfessionalName?.toLowerCase() || "";
+
+    return (
+      campName.includes(term) ||
+      participantName.includes(term) ||
+      campDateStr.includes(term) ||
+      healthcareName.includes(term)
+    );
+  });
 
   const handleCancel = async (id) => {
     const confirm = await Swal.fire({
@@ -114,79 +144,108 @@ const RegisteredCamps = () => {
       <h2 className="text-3xl font-bold mb-6 text-center text-blue-600">
         My Registered Camps
       </h2>
-      {registeredCamps.length === 0 ? (
+
+      {/* SearchBar added here */}
+      <SearchBar
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        placeholder="Search by camp name, date, or participant name"
+      />
+
+      {filteredCamps.length === 0 ? (
         <p className="text-center text-gray-500">No camps registered yet.</p>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="table table-zebra w-full">
-            <thead>
-              <tr className="bg-blue-100 text-blue-800">
-                <th>#</th>
-                <th>Camp Name</th>
-                <th>Fees</th>
-                <th>Participant</th>
-                <th>Payment</th>
-                <th>Confirmed</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {registeredCamps.map((item, index) => (
-                <tr key={item._id}>
-                  <td>{index + 1}</td>
-                  <td>{item.campName}</td>
-                  <td>${item.fees}</td>
-                  <td>{item.participantName}</td>
-                  <td>
-                    {item.paymentStatus === "paid" ? (
-                      <button className="btn btn-sm btn-success btn-disabled text-gray-500">
-                        Paid
-                      </button>
-                    ) : (
-                      <Link to={`/dashboard/payment/${item.campId}`}>
-                        <button className="btn btn-sm btn-success bg-blue-700 text-white">
-                          Pay
-                        </button>
-                      </Link>
-                    )}
-                  </td>
-                  <td
-                    className={
-                      item.confirmationStatus === "Confirmed"
-                        ? "text-green-600"
-                        : "text-yellow-600"
-                    }
-                  >
-                    {item.confirmationStatus || "Pending"}
-                  </td>
-                  <td className="space-x-2">
-                    {item.paymentStatus === "paid" && (
-                      <button
-                        className="btn btn-sm btn-outline btn-info"
-                        onClick={() =>
-                          handleFeedback(
-                            item.campName,
-                            item._id,
-                            item.campImage
-                          )
-                        }
-                      >
-                        Feedback
-                      </button>
-                    )}
-                    <button
-                      className="btn btn-sm btn-outline btn-error text-gray-500"
-                      onClick={() => handleCancel(item._id)}
-                      disabled={item.paymentStatus === "paid"}
-                    >
-                      Cancel
-                    </button>
-                  </td>
+        <>
+          <div className="overflow-x-auto">
+            <table className="table table-zebra w-full">
+              <thead>
+                <tr className="bg-blue-100 text-blue-800">
+                  <th>#</th>
+                  <th>Camp Name</th>
+                  <th>Fees</th>
+                  <th>Participant</th>
+                  <th>Payment</th>
+                  <th>Confirmed</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {filteredCamps.map((item, index) => (
+                  <tr key={item._id}>
+                    <td>{(page - 1) * limit + index + 1}</td>
+                    <td>{item.campName}</td>
+                    <td>${item.fees}</td>
+                    <td>{item.participantName}</td>
+                    <td>
+                      {item.paymentStatus === "paid" ? (
+                        <button className="btn btn-sm btn-success btn-disabled text-gray-500">
+                          Paid
+                        </button>
+                      ) : (
+                        <Link to={`/dashboard/payment/${item.campId}`}>
+                          <button className="btn btn-sm btn-success bg-blue-700 text-white">
+                            Pay
+                          </button>
+                        </Link>
+                      )}
+                    </td>
+                    <td
+                      className={
+                        item.confirmationStatus === "Confirmed"
+                          ? "text-green-600"
+                          : "text-yellow-600"
+                      }
+                    >
+                      {item.confirmationStatus || "Pending"}
+                    </td>
+                    <td className="space-x-2">
+                      {item.paymentStatus === "paid" && (
+                        <button
+                          className="btn btn-sm btn-outline btn-info"
+                          onClick={() =>
+                            handleFeedback(
+                              item.campName,
+                              item._id,
+                              item.campImage
+                            )
+                          }
+                        >
+                          Feedback
+                        </button>
+                      )}
+                      <button
+                        className="btn btn-sm btn-outline btn-error text-gray-500"
+                        onClick={() => handleCancel(item._id)}
+                        disabled={item.paymentStatus === "paid"}
+                      >
+                        Cancel
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Pagination Controls */}
+          <div className="flex justify-center gap-3 mt-4">
+            <button
+              className="btn btn-sm"
+              disabled={page === 1}
+              onClick={() => setPage((p) => Math.max(p - 1, 1))}
+            >
+              Previous
+            </button>
+            <span className="btn btn-sm btn-disabled">{page}</span>
+            <button
+              className="btn btn-sm"
+              disabled={page === totalPages}
+              onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+            >
+              Next
+            </button>
+          </div>
+        </>
       )}
 
       {feedbackModalOpen && (
