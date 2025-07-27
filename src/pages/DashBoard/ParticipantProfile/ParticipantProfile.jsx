@@ -16,29 +16,31 @@ const ParticipantProfile = () => {
   });
 
   useEffect(() => {
-  if (user?.email) {
-    axiosSecure
-      .get(`/participants?email=${user.email}`)
-      .then((res) => {
-        if (!res.data || res.data.length === 0) {
-          console.warn("No participant found for email:", user.email);
-          return; 
-        }
+    if (user?.email) {
+      axiosSecure
+        .get(`/users/search?email=${user.email}`)
+        .then((res) => {
+          console.log(res)
+          if (!res.data || res.data.length === 0) {
+            console.warn("No participant found for email:", user.email);
+            return; 
+          }
 
-        const data = res.data[0];
-        setProfile(data);
-      setFormData({
-  name: data.name || data.participantName || "",
-  image: data.image || "",
-  contact: data.contact || ""
-});
+          const data = res.data;
+          console.log(data)
+          setProfile(data);
+          setFormData({
+            name: data?.name || data?.participantName || "",
+            image: data?.photo || "",
+            contact: data?.contact || ""
+          });
 
-      })
-      .catch((err) => {
-        console.error("Failed to load profile", err);
-      });
-  }
-}, [user, axiosSecure]);
+        })
+        .catch((err) => {
+          console.error("Failed to load profile", err);
+        });
+    }
+  }, [user, axiosSecure]);
 
 
   const handleUpdateClick = () => setIsEditing(true);
@@ -51,21 +53,21 @@ const ParticipantProfile = () => {
     e.preventDefault();
     try {
       const res = await axiosSecure.put(`/participants/${profile._id}`, {
-  name: formData.name,
-  image: formData.image,
-  contact: formData.contact,
-   email: user.email
-});
+        name: formData.name,
+        image: formData.image,
+        contact: formData.contact,
+        email: user.email
+      });
+      console.log(res)
 
       if (res.data.modifiedCount > 0) {
-     setProfile((prev) => ({
-  ...prev,
-  name: formData.name,
-  participantName: formData.name,  
-  image: formData.image,
-  contact: formData.contact
-}));
-
+        setProfile((prev) => ({
+          ...prev,
+          name: formData.name,
+          participantName: formData.name,  
+          image: formData.image,
+          contact: formData.contact
+        }));
 
         Swal.fire("Updated!", "Profile updated successfully.", "success");
         setIsEditing(false);
@@ -82,26 +84,26 @@ const ParticipantProfile = () => {
   }
 
   return (
-    <div className="w-full mx-auto mt-10 p-6  bg-white rounded-lg shadow-lg">
+    <div className="w-full max-w-lg mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg">
       <h2 className="text-3xl font-bold text-center mb-6 text-blue-700">My Profile</h2>
 
-      <div className="flex flex-col items-center mb-6">
+      <div className="flex flex-col items-center mb-6 px-4">
         <img
-  src={
-    profile.image
-      ? profile.image
-      : user?.photoURL
-        ? user.photoURL
-        : "https://i.ibb.co/2kRZKmW/default-avatar.png"
-  }
-  alt={profile.participantName || profile.name}
-  className="w-24 h-24 rounded-full border-4 border-green-600 mb-3 object-cover"
-/>
+          src={
+            profile.image
+              ? profile.image
+              : user?.photoURL
+                ? user.photoURL
+                : "https://i.ibb.co/2kRZKmW/default-avatar.png"
+          }
+          alt={profile.participantName || profile.name}
+          className="w-24 h-24 rounded-full border-4 border-green-600 mb-3 object-cover"
+        />
 
-       <p className="text-gray-800 text-xl font-semibold">{profile.participantName || profile.name}</p>
+        <p className="text-gray-800 text-xl font-semibold text-center break-words">{profile.participantName || profile.name}</p>
 
-        <p className="text-gray-700">{user.email}</p>
-        <p className="text-gray-700">Contact: {profile.contact || "N/A"}</p>
+        <p className="text-gray-700 break-words text-center">{user.email}</p>
+        <p className="text-gray-700 break-words text-center">Contact: {profile.contact || "N/A"}</p>
       </div>
 
       <button
@@ -113,9 +115,9 @@ const ParticipantProfile = () => {
 
       {/* Modal Form */}
       {isEditing && (
-        <div className="fixed inset-0 backdrop-brightness-75 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg w-full max-w-md shadow-lg relative">
-            <h3 className="text-xl font-bold mb-4 text-blue-700">Update Profile</h3>
+        <div className="fixed inset-0 backdrop-brightness-75 flex justify-center items-center z-50 px-4">
+          <div className="bg-white p-6 rounded-lg w-full max-w-md shadow-lg relative max-h-[90vh] overflow-auto">
+            <h3 className="text-xl font-bold mb-4 text-blue-700 text-center">Update Profile</h3>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
@@ -152,15 +154,15 @@ const ParticipantProfile = () => {
                 />
               </div>
 
-              <div className="flex justify-end space-x-3 pt-2">
+              <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3 pt-2">
                 <button
                   type="button"
                   onClick={() => setIsEditing(false)}
-                  className="btn btn-outline"
+                  className="btn btn-outline w-full sm:w-auto"
                 >
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-primary">
+                <button type="submit" className="btn btn-primary w-full sm:w-auto">
                   Save
                 </button>
               </div>

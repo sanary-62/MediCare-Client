@@ -21,83 +21,80 @@ const ManageCamps = () => {
     if (user?.email) {
       axiosSecure
         .get(`/camps?organizerEmail=${user.email}&page=${page}&limit=${limit}`)
-      .then((res) => {
-  const data = Array.isArray(res.data) ? res.data : res.data.camps ?? [];
-  setCamps(data);
-  setTotalPages(res.data.totalPages ?? 1); // Or set to 1 if no pagination
-})
-
-
+        .then((res) => {
+          const data = Array.isArray(res.data) ? res.data : res.data.camps ?? [];
+          setCamps(data);
+          setTotalPages(res.data.totalPages ?? 1);
+        })
         .catch((err) => console.error(err));
     }
   }, [user, axiosSecure, page]);
 
- const handleDelete = async (campId) => {
-  const confirm = await Swal.fire({
-    title: "Are you sure?",
-    text: "This will permanently delete the camp!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#d33",
-    cancelButtonColor: "#3085d6",
-    confirmButtonText: "Yes, delete it!",
-  });
+  const handleDelete = async (campId) => {
+    const confirm = await Swal.fire({
+      title: "Are you sure?",
+      text: "This will permanently delete the camp!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    });
 
-  if (confirm.isConfirmed) {
-    try {
-      const res = await axiosSecure.delete(`/delete-camp/${campId}`);
-      if (res.data.deletedCount > 0) {
-        setCamps((prevCamps) => {
-          const updated = prevCamps.filter((camp) => camp._id !== campId);
-          if (updated.length === 0 && page > 1) {
-            setPage((prevPage) => prevPage - 1);
-          }
-          return updated;
-        });
-        Swal.fire("Deleted!", "Camp has been deleted.", "success");
+    if (confirm.isConfirmed) {
+      try {
+        const res = await axiosSecure.delete(`/delete-camp/${campId}`);
+        if (res.data.deletedCount > 0) {
+          setCamps((prevCamps) => {
+            const updated = prevCamps.filter((camp) => camp._id !== campId);
+            if (updated.length === 0 && page > 1) {
+              setPage((prevPage) => prevPage - 1);
+            }
+            return updated;
+          });
+          Swal.fire("Deleted!", "Camp has been deleted.", "success");
+        }
+      } catch (err) {
+        console.error(err);
+        Swal.fire("Error", "Failed to delete the camp.", "error");
       }
-    } catch (err) {
-      console.error(err);
-      Swal.fire("Error", "Failed to delete the camp.", "error");
     }
-  }
-};
-
+  };
 
   // Filter camps by search term (campName or location)
- const filteredCamps = (camps || []).filter((camp) => {
-  const term = searchTerm.toLowerCase();
-  const campName = camp.campName?.toLowerCase() || "";
-  const location = camp.location?.toLowerCase() || "";
-  return campName.includes(term) || location.includes(term);
-});
+  const filteredCamps = (camps || []).filter((camp) => {
+    const term = searchTerm.toLowerCase();
+    const campName = camp.campName?.toLowerCase() || "";
+    const location = camp.location?.toLowerCase() || "";
+    return campName.includes(term) || location.includes(term);
+  });
 
   return (
-    <div className="p-4">
-      <h2 className="text-4xl font-bold text-blue-700 mb-6">Manage Camps</h2>
+    <div className="p-4 max-w-6xl mx-auto w-full">
+      <h2 className="text-4xl font-bold text-blue-700 mb-6 text-center">Manage Camps</h2>
 
-      {/* SearchBar added */}
-     <SearchBar
-  searchTerm={searchTerm}
-  setSearchTerm={setSearchTerm}
-  placeholder="Search by camp name or location"
-/>
-
+      <div className="mb-6 px-2 max-w-md mx-auto">
+        <SearchBar
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          placeholder="Search by camp name or location"
+        />
+      </div>
 
       {filteredCamps.length === 0 ? (
-        <p className="text-gray-600">No camps found.</p>
+        <p className="text-gray-600 text-center">No camps found.</p>
       ) : (
         <>
-          <div className="overflow-x-auto">
-            <table className="table w-full border border-gray-300">
+          <div className="overflow-x-auto px-2">
+            <table className="table w-full border border-gray-300 rounded-md">
               <thead className="bg-blue-100 text-blue-800">
                 <tr>
-                  <th>#</th>
-                  <th>Camp Name</th>
-                  <th>Date & Time</th>
-                  <th>Location</th>
-                  <th>Healthcare Professional</th>
-                  <th>Actions</th>
+                  <th className="whitespace-nowrap">#</th>
+                  <th className="whitespace-nowrap">Camp Name</th>
+                  <th className="whitespace-nowrap">Date & Time</th>
+                  <th className="whitespace-nowrap">Location</th>
+                  <th className="whitespace-nowrap">Healthcare Professional</th>
+                  <th className="whitespace-nowrap">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -108,15 +105,15 @@ const ManageCamps = () => {
                     <td>{new Date(camp.date).toLocaleString()}</td>
                     <td>{camp.location}</td>
                     <td>{camp.healthcareProfessional}</td>
-                    <td className="space-x-2 flex">
+                    <td className="space-x-2 flex flex-wrap justify-center gap-2">
                       <Link to={`/dashboard/update-camp/${camp._id}`}>
-                        <button className="btn btn-sm btn-warning text-white bg-green-600 ">
+                        <button className="btn btn-sm btn-warning text-white bg-green-600 whitespace-nowrap">
                           Update
                         </button>
                       </Link>
                       <button
                         onClick={() => handleDelete(camp._id)}
-                        className="btn btn-sm btn-error bg-red-600 text-white"
+                        className="btn btn-sm btn-error bg-red-600 text-white whitespace-nowrap"
                       >
                         Delete
                       </button>
@@ -128,7 +125,7 @@ const ManageCamps = () => {
           </div>
 
           {/* Pagination Controls */}
-          <div className="flex justify-center gap-3 mt-4">
+          <div className="flex justify-center gap-3 mt-4 flex-wrap">
             <button
               className="btn btn-sm"
               disabled={page === 1}

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
-import { Link, useNavigate } from "react-router";
-import SearchBar from "../../SearchBar/SearchBar"; 
+import { Link } from "react-router-dom";
+import SearchBar from "../../SearchBar/SearchBar";
 
 const RegisteredCamps = () => {
   const { user } = useAuth();
@@ -17,7 +17,6 @@ const RegisteredCamps = () => {
   const [currentFeedbackCamp, setCurrentFeedbackCamp] = useState(null);
   const [feedbackText, setFeedbackText] = useState("");
   const [rating, setRating] = useState(0);
-  const navigate = useNavigate();
 
   // Pagination state
   const [page, setPage] = useState(1);
@@ -29,10 +28,12 @@ const RegisteredCamps = () => {
       axiosSecure
         .get(`/participants?email=${user.email}&page=${page}&limit=${limit}`)
         .then((res) => {
-          setRegisteredCamps(res.data.camps);
-          setTotalPages(res.data.totalPages);
+          setRegisteredCamps(res.data.camps || []);
+          setTotalPages(res.data.totalPages || 1);
         })
-        .catch((err) => console.error("Error fetching registrations", err));
+        .catch((err) => {
+          console.error("Error fetching registrations", err);
+        });
     }
   }, [user, axiosSecure, page]);
 
@@ -68,7 +69,8 @@ const RegisteredCamps = () => {
         await axiosSecure.delete(`/participants/${id}`);
         setRegisteredCamps((prev) => prev.filter((item) => item._id !== id));
         Swal.fire("Cancelled!", "Registration has been cancelled.", "success");
-      } catch (error) {
+      } catch (err) {
+        console.error("Error canceling registration:", err);
         Swal.fire("Error!", "Failed to cancel registration.", "error");
       }
     }
@@ -105,42 +107,14 @@ const RegisteredCamps = () => {
       });
       setFeedbackModalOpen(false);
       Swal.fire("Thanks!", "Your feedback has been submitted.", "success");
-    } catch (error) {
+    } catch (err) {
+      console.error("Error submitting feedback:", err);
       Swal.fire("Error!", "Failed to submit feedback.", "error");
     }
   };
 
-  const handlePayment = async (id) => {
-    try {
-      const transactionId = "txn_" + Math.random().toString(36).substr(2, 9);
-      navigate(`/dashboard/payment/${id}`);
-
-      await Swal.fire(
-        "Payment Successful",
-        `Transaction ID: ${transactionId}`,
-        "success"
-      );
-
-      setRegisteredCamps((prev) =>
-        prev.map((camp) =>
-          camp._id === id
-            ? {
-                ...camp,
-                paymentStatus: "paid",
-                confirmationStatus: "Confirmed",
-                transactionId,
-              }
-            : camp
-        )
-      );
-    } catch (error) {
-      console.error("Payment error:", error.response || error.message || error);
-      Swal.fire("Payment Failed", "Please try again.", "error");
-    }
-  };
-
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="max-w-6xl mx-auto p-4 md:p-6">
       <h2 className="text-3xl font-bold mb-6 text-center text-blue-600">
         My Registered Camps
       </h2>
@@ -153,11 +127,11 @@ const RegisteredCamps = () => {
       />
 
       {filteredCamps.length === 0 ? (
-        <p className="text-center text-gray-500">No camps registered yet.</p>
+        <p className="text-center text-gray-500 mt-8">No camps registered yet.</p>
       ) : (
         <>
-          <div className="overflow-x-auto">
-            <table className="table table-zebra w-full">
+          <div className="overflow-x-auto mt-4 rounded-lg shadow-lg">
+            <table className="table table-zebra w-full min-w-[600px]">
               <thead>
                 <tr className="bg-blue-100 text-blue-800">
                   <th>#</th>
@@ -198,7 +172,7 @@ const RegisteredCamps = () => {
                     >
                       {item.confirmationStatus || "Pending"}
                     </td>
-                    <td className="space-x-2">
+                    <td className="space-x-2 flex flex-wrap gap-2 justify-center">
                       {item.paymentStatus === "paid" && (
                         <button
                           className="btn btn-sm btn-outline btn-info"
@@ -228,7 +202,7 @@ const RegisteredCamps = () => {
           </div>
 
           {/* Pagination Controls */}
-          <div className="flex justify-center gap-3 mt-4">
+          <div className="flex flex-wrap justify-center gap-3 mt-4">
             <button
               className="btn btn-sm"
               disabled={page === 1}
@@ -249,13 +223,13 @@ const RegisteredCamps = () => {
       )}
 
       {feedbackModalOpen && (
-        <div className="fixed inset-0 backdrop-brightness-75 flex justify-center items-center z-50">
+        <div className="fixed inset-0 backdrop-brightness-75 flex justify-center items-center z-50 px-4">
           <div className="bg-white rounded-lg p-6 max-w-md w-full relative">
-            <h3 className="text-xl font-semibold mb-4">
+            <h3 className="text-xl font-semibold mb-4 text-center">
               Feedback for {currentFeedbackCamp?.campName}
             </h3>
 
-            <div className="rating mb-4 justify-center">
+            <div className="rating mb-4 justify-center flex gap-1">
               {[1, 2, 3, 4, 5].map((star) => (
                 <input
                   key={star}
@@ -276,14 +250,17 @@ const RegisteredCamps = () => {
               onChange={(e) => setFeedbackText(e.target.value)}
             />
 
-            <div className="flex justify-end space-x-3">
+            <div className="flex justify-end space-x-3 flex-wrap gap-2">
               <button
-                className="btn btn-outline"
+                className="btn btn-outline flex-1 min-w-[100px]"
                 onClick={() => setFeedbackModalOpen(false)}
               >
                 Cancel
               </button>
-              <button className="btn btn-primary" onClick={submitFeedback}>
+              <button
+                className="btn btn-primary flex-1 min-w-[100px]"
+                onClick={submitFeedback}
+              >
                 Submit
               </button>
             </div>

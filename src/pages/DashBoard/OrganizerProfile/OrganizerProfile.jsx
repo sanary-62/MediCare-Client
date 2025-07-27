@@ -19,17 +19,17 @@ const OrganizerProfile = () => {
   useEffect(() => {
     if (user?.email) {
       axiosSecure
-        .get(`/participants?email=${user?.email}`)
+        .get(`/organizers?email=${user?.email}`)
         .then((res) => {
           if (!res.data || res.data.length === 0) {
             console.warn("No organizer found for email:", user?.email);
-            setLoading (false)
+            setLoading(false);
             return;
           }
 
           const data = res.data[0];
           setProfile(data);
-          setLoading(false)
+          setLoading(false);
           setFormData({
             name: data?.name || data?.participantName || "",
             image: data?.image || "",
@@ -51,7 +51,7 @@ const OrganizerProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axiosSecure.put(`/participants/${profile._id}`, {
+      const res = await axiosSecure.put(`/organizers/${profile._id}`, {
         name: formData?.name,
         image: formData?.image,
         contact: formData?.contact,
@@ -70,7 +70,8 @@ const OrganizerProfile = () => {
         Swal.fire("Updated!", "Profile updated successfully.", "success");
         setIsEditing(false);
       }
-    } catch (error) {
+    } catch (err) {
+      console.error("Error updating profile:", err);
       Swal.fire("Error", "Failed to update profile.", "error");
     }
   };
@@ -80,12 +81,12 @@ const OrganizerProfile = () => {
   }
 
   return (
-    <div className="w-full mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg">
+    <div className="w-full max-w-lg mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg">
       <h2 className="text-3xl font-bold text-center mb-6 text-blue-700">
         Organizer Profile
       </h2>
 
-      <div className="flex flex-col items-center mb-6">
+      <div className="flex flex-col items-center mb-6 px-4">
         <img
           src={
             profile?.image
@@ -93,17 +94,18 @@ const OrganizerProfile = () => {
               : user?.photoURL
               ? user?.photoURL
               : "https://i.ibb.co/8xM4J2g/default-user.png"
-
           }
           alt={profile?.participantName || profile?.name || "Profile Avatar"}
           className="w-24 h-24 rounded-full border-4 border-blue-600 mb-3 object-cover"
         />
-        <p className="text-gray-800 text-xl font-semibold">
+        <p className="text-gray-800 text-xl font-semibold text-center break-words">
           {profile?.participantName || profile?.name || "Unnamed"}
         </p>
 
-        <p className="text-gray-700">{user?.email}</p>
-        <p className="text-gray-700">Contact: {profile?.contact || "N/A"}</p>
+        <p className="text-gray-700 break-words text-center">{user?.email}</p>
+        <p className="text-gray-700 break-words text-center">
+          Contact: {profile?.contact || "N/A"}
+        </p>
       </div>
 
       <button
@@ -114,9 +116,9 @@ const OrganizerProfile = () => {
       </button>
 
       {isEditing && (
-        <div className="fixed inset-0 backdrop-brightness-75 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg w-full max-w-md shadow-lg relative">
-            <h3 className="text-xl font-bold mb-4 text-blue-700">
+        <div className="fixed inset-0 backdrop-brightness-75 flex justify-center items-center z-50 px-4">
+          <div className="bg-white p-6 rounded-lg w-full max-w-md shadow-lg relative max-h-[90vh] overflow-auto">
+            <h3 className="text-xl font-bold mb-4 text-blue-700 text-center">
               Update Profile
             </h3>
 
@@ -161,15 +163,15 @@ const OrganizerProfile = () => {
                 />
               </div>
 
-              <div className="flex justify-end space-x-3 pt-2">
+              <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3 pt-2">
                 <button
                   type="button"
                   onClick={() => setIsEditing(false)}
-                  className="btn btn-outline"
+                  className="btn btn-outline w-full sm:w-auto"
                 >
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-primary">
+                <button type="submit" className="btn btn-primary w-full sm:w-auto">
                   Save
                 </button>
               </div>

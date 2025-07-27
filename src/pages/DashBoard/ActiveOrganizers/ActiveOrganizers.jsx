@@ -30,7 +30,7 @@ const ActiveOrganizers = () => {
   const currentOrganizers = filteredOrganizers.slice(startIndex, startIndex + limit);
 
   return (
-    <div className="p-4">
+    <div className="p-4 max-w-7xl mx-auto">
       <h2 className="text-4xl text-green-700 font-bold mb-6 text-center">Active Organizers</h2>
 
       <SearchBar
@@ -39,15 +39,15 @@ const ActiveOrganizers = () => {
         placeholder="Search by name, email, or region"
       />
 
-      <div className="overflow-x-auto">
-        <table className="table table-zebra w-full text-center">
+      <div className="overflow-x-auto mt-4">
+        <table className="table table-zebra w-full text-center min-w-[600px] sm:min-w-full">
           <thead className="bg-base-200">
             <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Region</th>
-              <th>Phone</th>
+              <th className="whitespace-nowrap">#</th>
+              <th className="whitespace-nowrap">Name</th>
+              <th className="whitespace-nowrap">Email</th>
+              <th className="whitespace-nowrap">Region</th>
+              <th className="whitespace-nowrap">Phone</th>
             </tr>
           </thead>
           <tbody>
@@ -64,17 +64,17 @@ const ActiveOrganizers = () => {
         </table>
       </div>
 
-      <div className="flex justify-center gap-3 mt-4">
+      <div className="flex flex-col sm:flex-row justify-center items-center gap-3 mt-4">
         <button
-          className="btn btn-sm"
+          className="btn btn-sm w-full sm:w-auto"
           disabled={page === 1}
           onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
         >
           Previous
         </button>
-        <span className="btn btn-sm btn-disabled">{page}</span>
+        <span className="btn btn-sm btn-disabled w-full sm:w-auto">{page}</span>
         <button
-          className="btn btn-sm"
+          className="btn btn-sm w-full sm:w-auto"
           disabled={page === totalPages}
           onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
         >

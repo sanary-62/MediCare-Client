@@ -42,20 +42,21 @@ const ManageAdmin = () => {
   };
 
   return (
-    <div className="p-6 w-full mx-auto">
-      <h2 className="text-4xl font-bold text-blue-700 mb-6 text-center ">Manage Admin</h2>
+    <div className="p-6 max-w-4xl mx-auto w-full">
+      <h2 className="text-4xl font-bold text-blue-700 mb-6 text-center">Manage Admin</h2>
 
-      {/* Replaced input and button with SearchBar component */}
-      <div className="flex items-center gap-2 mb-6 w-96">
-        <SearchBar
-          searchTerm={searchEmail}
-          setSearchTerm={setSearchEmail}
-          placeholder="Enter email to search"
-        />
+      <div className="flex justify-center mb-6 px-2">
+        <div className="w-full max-w-md">
+          <SearchBar
+            searchTerm={searchEmail}
+            setSearchTerm={setSearchEmail}
+            placeholder="Enter email to search"
+          />
+        </div>
       </div>
 
       {user && (
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto px-2">
           <table className="table table-zebra w-full text-center bg-base-100 shadow border border-gray-300 rounded">
             <thead className="bg-base-200 text-base">
               <tr>

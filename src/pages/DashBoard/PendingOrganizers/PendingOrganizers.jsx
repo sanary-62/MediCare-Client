@@ -73,7 +73,7 @@ const PendingOrganizers = () => {
   });
 
   return (
-    <div className="p-4">
+    <div className="p-4 md:p-8 max-w-7xl mx-auto">
       <h2 className="text-4xl text-blue-700 font-bold mb-6 text-center">
         Pending Organizers
       </h2>
@@ -84,8 +84,8 @@ const PendingOrganizers = () => {
         placeholder="Search by name, email, region or phone"
       />
 
-      <div className="overflow-x-auto">
-        <table className="table table-zebra w-full text-center">
+      <div className="overflow-x-auto mt-4 shadow-lg rounded-lg">
+        <table className="table table-zebra w-full min-w-[600px] text-center">
           <thead className="bg-base-200">
             <tr>
               <th>#</th>
@@ -109,7 +109,7 @@ const PendingOrganizers = () => {
                   <td>{org.email}</td>
                   <td>{org.region}</td>
                   <td>{org.phone}</td>
-                  <td className="flex gap-2 justify-center">
+                  <td className="flex flex-wrap justify-center gap-2">
                     <button
                       className="btn bg-blue-700 text-white btn-sm btn-info"
                       onClick={() => setSelectedOrganizer(org)}
@@ -147,7 +147,7 @@ const PendingOrganizers = () => {
       </div>
 
       {/* Pagination Controls */}
-      <div className="flex justify-center gap-3 mt-4">
+      <div className="flex flex-wrap justify-center gap-3 mt-4">
         <button
           className="btn btn-sm"
           disabled={page === 1}

@@ -1,10 +1,10 @@
 
 import React from 'react';
 import { AuthContext } from '../contexts/AuthContext/AuthContext';
-import { use } from 'react';
+import { useContext } from 'react';
 
 const useAuth = () => {
-    const authInfo = use(AuthContext);
+    const authInfo = useContext(AuthContext);
     return authInfo;
 };
  

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
 import Swal from "sweetalert2";
-import SearchBar from "../../SearchBar/SearchBar"; // Add SearchBar import
+import SearchBar from "../../SearchBar/SearchBar"; 
 
 const ManageRegisteredCamps = () => {
   const [registrations, setRegistrations] = useState([]);
@@ -11,9 +11,8 @@ const ManageRegisteredCamps = () => {
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const limit = 5; // number of registrations per page
+  const limit = 5; 
 
-  // Search state
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
@@ -29,8 +28,6 @@ const ManageRegisteredCamps = () => {
         .catch((err) => console.error("Fetch error:", err));
     }
   }, [user, axiosSecure, page]);
-
-  
 
   const handleConfirm = async (id) => {
     try {
@@ -68,7 +65,6 @@ const ManageRegisteredCamps = () => {
           setRegistrations((prev) => prev.filter((r) => r._id !== id));
           Swal.fire("Cancelled", "The registration has been removed.", "success");
 
-          // If last item deleted and no registrations left on page, go to previous page
           if (registrations.length === 1 && page > 1) {
             setPage(page - 1);
           }
@@ -82,51 +78,50 @@ const ManageRegisteredCamps = () => {
 
   // Filter registrations by search term (campName or participantName)
   const filteredRegistrations = searchTerm
-  ? registrations.filter((reg) => {
-      const term = searchTerm.toLowerCase();
-      const campName = reg.campName?.toLowerCase() || "";
-      const participantName = reg.participantName?.toLowerCase() || "";
-      return campName.includes(term) || participantName.includes(term);
-    })
-  : registrations;
+    ? registrations.filter((reg) => {
+        const term = searchTerm.toLowerCase();
+        const campName = reg.campName?.toLowerCase() || "";
+        const participantName = reg.participantName?.toLowerCase() || "";
+        return campName.includes(term) || participantName.includes(term);
+      })
+    : registrations;
 
   return (
-    <div className="p-4">
-      <h2 className="text-4xl font-bold text-blue-700 mb-6">
+    <div className="p-4 max-w-7xl mx-auto w-full">
+      <h2 className="text-4xl font-bold text-blue-700 mb-6 text-center">
         Manage Registered Camps
       </h2>
 
-      {/* SearchBar added */}
-      <SearchBar
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        placeholder="Search by camp or participant name"
-      />
+      <div className="mb-6 px-2 max-w-md mx-auto">
+        <SearchBar
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          placeholder="Search by camp or participant name"
+        />
+      </div>
 
       {filteredRegistrations?.length === 0 ? (
-        <p className="text-gray-600">No registered participants found.</p>
+        <p className="text-gray-600 text-center">No registered participants found.</p>
       ) : (
         <>
-          <div className="overflow-x-auto">
-            <table className="table w-full text-black  border border-gray-300">
+          <div className="overflow-x-auto px-2">
+            <table className="table w-full text-black border border-gray-300 rounded-md">
               <thead className="bg-blue-100 text-blue-800">
                 <tr>
-                  <th>#</th>
-                  <th>Camp Name</th>
-                  <th>Fees</th>
-                  <th>Participant Name</th>
-                  <th>Payment Status</th>
-                  <th>Confirmation</th>
-                  <th>Cancel</th>
+                  <th className="whitespace-nowrap">#</th>
+                  <th className="whitespace-nowrap">Camp Name</th>
+                  <th className="whitespace-nowrap">Fees</th>
+                  <th className="whitespace-nowrap">Participant Name</th>
+                  <th className="whitespace-nowrap">Payment Status</th>
+                  <th className="whitespace-nowrap">Confirmation</th>
+                  <th className="whitespace-nowrap">Cancel</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredRegistrations?.map((reg, idx) => {
                   const isPaidConfirmed =
-                    reg.paymentStatus?.toLowerCase() === "paid"
- &&
-                    reg.confirmationStatus?.toLowerCase() === "confirmed"
-
+                    reg.paymentStatus?.toLowerCase() === "paid" &&
+                    reg.confirmationStatus?.toLowerCase() === "confirmed";
 
                   return (
                     <tr key={reg._id} className="hover">
@@ -147,11 +142,13 @@ const ManageRegisteredCamps = () => {
                       </td>
                       <td>
                         {reg.confirmationStatus === "Confirmed" ? (
-                          <span className="badge badge-success btn btn-sm bg-green-600 text-white">Confirmed</span>
+                          <span className="badge badge-success btn btn-sm bg-green-600 text-white">
+                            Confirmed
+                          </span>
                         ) : (
                           <button
                             onClick={() => handleConfirm(reg._id)}
-                            className="btn btn-sm btn-warning"
+                            className="btn btn-sm btn-warning whitespace-nowrap"
                           >
                             {reg?.confirmationStatus}
                           </button>
@@ -161,7 +158,9 @@ const ManageRegisteredCamps = () => {
                         <button
                           onClick={() => handleCancel(reg._id, isPaidConfirmed)}
                           className={`btn btn-sm ${
-                            isPaidConfirmed ? "btn-disabled" : "btn-error bg-red-600 text-white"
+                            isPaidConfirmed
+                              ? "btn-disabled whitespace-nowrap"
+                              : "btn-error bg-red-600 text-white whitespace-nowrap"
                           }`}
                           disabled={isPaidConfirmed}
                         >
@@ -176,7 +175,7 @@ const ManageRegisteredCamps = () => {
           </div>
 
           {/* Pagination Controls */}
-          <div className="flex justify-center gap-3 mt-4">
+          <div className="flex justify-center gap-3 mt-4 flex-wrap">
             <button
               className="btn btn-sm"
               disabled={page === 1}

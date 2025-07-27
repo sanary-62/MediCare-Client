@@ -19,57 +19,54 @@ const BeAOrganizer = () => {
 
   const [profile, setProfile] = useState(null);
 
-useEffect(() => {
-  if (user?.email) {
-    axiosSecure
-      .get(`/participants?email=${user.email}`)
-      .then((res) => {
-        if (res.data && res.data.length > 0) {
-          setProfile(res.data[0]);
-        }
-      })
-      .catch((err) => {
-        console.error("Failed to fetch participant name", err);
-      });
-  }
-}, [user, axiosSecure]);
+  useEffect(() => {
+    if (user?.email) {
+      axiosSecure
+        .get(`/participants?email=${user.email}`)
+        .then((res) => {
+          if (res.data && res.data.length > 0) {
+            setProfile(res.data[0]);
+          }
+        })
+        .catch((err) => {
+          console.error("Failed to fetch participant name", err);
+        });
+    }
+  }, [user, axiosSecure]);
 
 
   const onSubmit = data => {
-  const organizerInfo = {
-    name: user?.displayName || '',
-    email: user?.email || '',
-    ...data,
+    const organizerInfo = {
+      name: user?.displayName || '',
+      email: user?.email || '',
+      ...data,
+    };
+
+    console.log('Organizer Application:', organizerInfo);
+
+    axiosSecure.post('/organizers', organizerInfo)
+      .then(res => {
+        if (res.data.insertedId) {
+          Swal.fire('Submitted!', 'Your application has been submitted successfully.', 'success');
+        }
+      })
+
+    reset();
   };
-
-  console.log('Organizer Application:', organizerInfo);
-
-  axiosSecure.post ('/organizers',organizerInfo)
-  .then (res => {
-    if(res.data.insertedId) {
-        Swal.fire('Submitted!', 'Your application has been submitted successfully.', 'success');
-    }
-  })
-
- 
-
-  reset();
-};
 
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-base-200 rounded-xl shadow-lg mt-10 mb-10">
+    <div className="max-w-xl mx-auto p-6 sm:p-10 bg-base-200 rounded-xl shadow-lg mt-10 mb-10">
       <h2 className="text-4xl font-bold text-center mb-6 text-blue-700">Become an Organizer</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
           <label className="label font-medium">Name</label>
           <input
-  type="text"
-  value={profile?.participantName || user?.displayName || ''}
-  readOnly
-  className="input input-bordered w-full bg-gray-100 cursor-not-allowed"
-/>
-
+            type="text"
+            value={profile?.participantName || user?.displayName || ''}
+            readOnly
+            className="input input-bordered w-full bg-gray-100 cursor-not-allowed"
+          />
         </div>
 
         <div>
@@ -83,20 +80,18 @@ useEffect(() => {
         </div>
 
         <div>
-  <label className="label font-medium">Age</label>
-  <input
-    type="number"
-   {...register("age", {
-  required: "Age is required",
-  validate: value => value >= 18 || "You must be at least 18 years old"
-})}
-
-    placeholder="Enter your age"
-    className="input input-bordered w-full"
-  />
-  {errors.age && <span className="text-red-500 text-sm">{errors.age.message}</span>}
-</div>
-
+          <label className="label font-medium">Age</label>
+          <input
+            type="number"
+            {...register("age", {
+              required: "Age is required",
+              validate: value => value >= 18 || "You must be at least 18 years old"
+            })}
+            placeholder="Enter your age"
+            className="input input-bordered w-full"
+          />
+          {errors.age && <span className="text-red-500 text-sm">{errors.age.message}</span>}
+        </div>
 
         <div>
           <label className="label font-medium">Region</label>
@@ -147,7 +142,7 @@ useEffect(() => {
         </div>
 
         <div className="text-center">
-          <button type="submit" className="btn btn-primary px-10 w-full">
+          <button type="submit" className="btn btn-primary px-10 w-full sm:w-auto">
             Submit Application
           </button>
         </div>

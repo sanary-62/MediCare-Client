@@ -11,7 +11,7 @@ const AboutUs = () => {
         <img
           src="https://i.postimg.cc/4NzXnCXw/About-1.jpg"
           alt="Our Mission"
-          className="rounded-lg shadow-md"
+          className="rounded-lg shadow-md w-full h-auto object-cover"
         />
         <div>
           <h2 className="text-2xl font-semibold mb-3 text-blue-600">Our Mission</h2>
@@ -37,7 +37,7 @@ const AboutUs = () => {
         <img
           src="https://i.postimg.cc/VkmmC76w/team-doctors-standing-corridor.jpg"
           alt="What We Do"
-          className="rounded-lg shadow-md"
+          className="rounded-lg shadow-md w-full h-auto object-cover"
         />
       </div>
 

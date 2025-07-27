@@ -24,7 +24,7 @@ const Analytics = () => {
   }, [user, axiosSecure]);
 
   return (
-    <div className="w-full mx-12 px-4 py-8">
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-8">
       <h2 className="text-3xl font-bold text-center text-blue-600 mb-6">
         Camp Registration Analytics
       </h2>
@@ -34,7 +34,7 @@ const Analytics = () => {
           No analytics data available.
         </p>
       ) : (
-        <div className="w-full h-[400px]">
+        <div className="w-full h-64 sm:h-96">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={analyticsData}
@@ -54,7 +54,7 @@ const Analytics = () => {
                 dataKey="fees"
                 fill="#4f46e5"
                 radius={[5, 5, 0, 0]}
-                barSize={70}  // Thin bars here
+                barSize={70}
               />
             </BarChart>
           </ResponsiveContainer>

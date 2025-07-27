@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import useAuth from '../../../hooks/useAuth';
-import SearchBar from '../../SearchBar/SearchBar';  // Import the reusable SearchBar
+import SearchBar from '../../SearchBar/SearchBar';  
 
 const PaymentHistory = () => {
   const { user } = useAuth();
@@ -11,7 +11,7 @@ const PaymentHistory = () => {
   // Pagination states
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const limit = 5; // payments per page
+  const limit = 5; 
 
   // Search state
   const [searchTerm, setSearchTerm] = useState("");
@@ -48,7 +48,7 @@ const PaymentHistory = () => {
   });
 
   return (
-    <div className="p-4 md:p-8">
+    <div className="p-4 md:p-8 max-w-7xl mx-auto">
       <h2 className="text-3xl font-bold mb-6 text-center text-blue-700">My Payment History</h2>
 
       {/* SearchBar added here */}
@@ -58,8 +58,8 @@ const PaymentHistory = () => {
         placeholder="Search by camp name, payment status, or confirmation status"
       />
 
-      <div className="overflow-x-auto shadow-xl rounded-xl">
-        <table className="table table-zebra w-full">
+      <div className="overflow-x-auto shadow-xl rounded-xl mt-4">
+        <table className="table table-zebra w-full min-w-[600px]">
           <thead className="bg-blue-100 text-blue-800">
             <tr>
               <th>#</th>
@@ -94,7 +94,7 @@ const PaymentHistory = () => {
       </div>
 
       {/* Pagination Controls */}
-      <div className="flex justify-center gap-3 mt-4">
+      <div className="flex justify-center gap-3 mt-4 flex-wrap">
         <button
           className="btn btn-sm"
           disabled={page === 1}
