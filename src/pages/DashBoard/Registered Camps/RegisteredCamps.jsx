@@ -21,21 +21,23 @@ const RegisteredCamps = () => {
   // Pagination state
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+
   const limit = 5; // items per page
 
   useEffect(() => {
     if (user?.email) {
       axiosSecure
-        .get(`/participants?email=${user.email}&page=${page}&limit=${limit}`)
+        .get(`/get-participants?email=${user.email}&page=${page}&limit=${limit}`)
         .then((res) => {
-          setRegisteredCamps(res.data.camps || []);
-          setTotalPages(res.data.totalPages || 1);
+          setRegisteredCamps(res.data || []);
+          // setTotalPages(res.data || 1);
         })
         .catch((err) => {
           console.error("Error fetching registrations", err);
         });
     }
   }, [user, axiosSecure, page]);
+  console.log(registeredCamps)
 
   // Filter camps by search term
   const filteredCamps = registeredCamps.filter((camp) => {
@@ -67,7 +69,32 @@ const RegisteredCamps = () => {
     if (confirm.isConfirmed) {
       try {
         await axiosSecure.delete(`/participants/${id}`);
-        setRegisteredCamps((prev) => prev.filter((item) => item._id !== id));
+        // setRegisteredCamps((prev) => prev.filter((item) => item._id !== id));
+
+
+
+ axiosSecure
+  .get(`/get-participants?email=${user.email}&page=${page}&limit=${limit}`)
+  .then((res) => {
+    const camps = res.data?.data || [];
+    const total = res.data?.pagination?.total || 0;
+    const totalPages = Math.ceil(total / limit);
+
+    if (camps.length === 0 && page > 1) {
+      // current page became empty → go back one page
+      setPage((prev) => prev - 1);
+    } else {
+      setRegisteredCamps(camps);
+      setTotalPages(totalPages);
+    }
+  })
+
+  .catch((err) => {
+    console.error("Error refreshing registrations", err);
+  });
+
+
+
         Swal.fire("Cancelled!", "Registration has been cancelled.", "success");
       } catch (err) {
         console.error("Error canceling registration:", err);
