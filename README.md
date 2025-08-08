@@ -59,3 +59,32 @@ A responsive Medical Camp Management System (MCMS) built using React.js and Tail
 "@tanstack/react-query"
 "@stripe/stripe-js"
 "aos" or "framer-motion"
+
+
+🧪 How to Run Locally
+Clone the repo:
+
+bash
+git clone https://github.com/your-username/MediCare-Client.git
+Install dependencies:
+
+bash
+npm install
+Create a .env file in the root directory:
+
+env
+VITE_FIREBASE_API_KEY=your_key
+VITE_AUTH_DOMAIN=your_auth_domain
+VITE_SERVER_BASE_URL=http://localhost:5000
+VITE_STRIPE_PUBLISHABLE_KEY=your_stripe_key
+Run the project:
+
+bash
+npm run dev
+
+
+📌 Organizer Credentials
+bash
+
+Email: baablu@gmail.com
+Password: baablu
