@@ -1,45 +1,61 @@
-# CampConnect - Frontend Client
+# MediCare Client
 
-Welcome to the **CampConnect** frontend application, designed for organizers and participants to manage camp registrations, payments, feedback, and more — all through an intuitive React interface.
-
----
-
-## Organizer Credentials (Example)
-
-- **Username (Email):** baablu@example.com  
-- **Password:** baablu@123
+A responsive Medical Camp Management System (MCMS) built using React.js and TailwindCSS. This frontend helps users explore, register, and manage their involvement in medical camps.
 
 ---
 
+## 🔗 Live Site
 
-
-## Key Features
-
-- Responsive React application with a clean, modern UI  
-- Organizer dashboard to view and manage registered participants  
-- Participants can view their registered camps and make payments  
-- Search functionality to filter camps and participants easily  
-- Pagination support for large datasets  
-- Confirmation and cancellation of registrations by organizers  
-- Feedback system allowing participants to rate and review camps  
-- Integration with secure payment gateway for hassle-free transactions  
-- Real-time updates on payment and confirmation status  
-- User authentication and authorization powered by Firebase  
-- Accessible UI components and clear notifications with SweetAlert2  
-- Mobile-friendly design for on-the-go management  
+🌐 [View Live Project](https://medi-care-cd4fc.web.app/)
 
 ---
 
-## Technologies Used
+## 🧰 Technologies Used
 
-- React.js with hooks  
-- React Router for client-side routing  
-- Tailwind CSS and DaisyUI for styling  
-- Axios for HTTP requests  
-- Firebase Authentication  
-- SweetAlert2 for interactive alerts  
-- Custom reusable components (SearchBar, Modals, etc.)
+- React.js
+- React Router DOM
+- Tailwind CSS
+- Axios
+- TanStack Query (React Query)
+- Firebase Authentication (Email & Social Login)
+- JWT (JSON Web Token)
+- Recharts (Analytics)
+- React Hook Form
+- Stripe (Payment)
+- SweetAlert2 / React-Toastify (Notifications)
+- AOS or Framer Motion (Animations)
 
 ---
 
-Feel free to explore, report issues, or contribute!
+## ⚙️ Core Features
+
+- 🔐 Secure Firebase + JWT Authentication
+- 👨‍⚕️ Organizer Dashboard for adding & managing camps
+- 👥 Participant Dashboard to register, pay, give feedback
+- 📈 Analytics charts using Recharts
+- 🔍 Search, Sort, and Pagination for camps & tables
+- 📅 Modal-based camp registration form
+- 📋 Feedback and rating system
+- 🔄 Persistent login for protected routes
+- ✅ Custom SweetAlerts/Toasts for all actions
+- ❌ 404 Not Found Page
+- 📱 Fully Responsive (mobile, tablet, desktop)
+
+---
+
+## 📦 Dependencies
+
+"bash"
+"axios"
+"firebase"
+"jwt-decode"
+"react"
+"react-dom"
+"react-hook-form"
+"react-icons"
+"react-router-dom"
+"react-toastify"
+"recharts"
+"@tanstack/react-query"
+"@stripe/stripe-js"
+"aos" or "framer-motion"
