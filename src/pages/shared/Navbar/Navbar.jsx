@@ -44,7 +44,7 @@ const Navbar = () => {
   );
 
   return (
-    <div className="navbar bg-base-100 shadow-sm px-4 md:px-8 lg:px-12">
+    <div className="navbar fixed top-0 left-0 w-full z-50 shadow-sm bg-[#F0FDF4] px-4 md:px-8 lg:px-12">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -60,7 +60,9 @@ const Navbar = () => {
             {navItems}
           </ul>
         </div>
-        <MediCareLogo />
+        <div className="ml-20">
+          <MediCareLogo />
+        </div>
       </div>
 
       <div className="navbar-center hidden lg:flex">
@@ -69,7 +71,7 @@ const Navbar = () => {
         </ul>
       </div>
 
-      <div className="navbar-end gap-2 sm:gap-3">
+      <div className="navbar-end gap-2 sm:gap-3 mr-4 sm:mr-6 md:mr-10 lg:mr-20">
         {user ? (
           <>
             <div className="relative group">
@@ -82,32 +84,32 @@ const Navbar = () => {
                       : "https://i.ibb.co/2kRZKmW/default-avatar.png"
                 }
                 alt="Profile"
-                className="w-10 h-10 min-w-10 rounded-full border-2 border-blue-500 cursor-pointer"
+                className="w-10 h-10 min-w-10 rounded-full border-2 border-green-800 cursor-pointer"
               />
               <div className="absolute top-12 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded hidden group-hover:block whitespace-nowrap z-10">
                 {profileData?.name || profileData?.participantName || user?.displayName || "Anonymous"}
               </div>
             </div>
 
-            <NavLink to="/dashboard" className='btn text-blue-800 bg-purple-200 text-sm px-3'>
-              My DashBoard
-            </NavLink>
+            <NavLink to="/dashboard" className='btn bg-[#FACC15] text-[#2E7D32] font-semibold text-sm px-3'>
+  My DashBoard
+</NavLink>
 
-            <button
-              onClick={handleSignOut}
-              className="btn text-white bg-red-700 ml-1 text-sm px-3"
-            >
-              SignOut
-            </button>
+<button
+  onClick={handleSignOut}
+  className="btn bg-red-700 text-white ml-1 text-sm px-3"
+>
+  SignOut
+</button>
           </>
         ) : (
           <>
-            <NavLink className="btn bg-blue-900 text-white text-sm px-3" to="/register">
-              Register
-            </NavLink>
-            <NavLink className="btn bg-blue-900 text-white text-sm px-3" to="/login">
-              Login
-            </NavLink>
+            <NavLink className="btn text-[#FACC15] bg-[#2E7D32] font-semibold text-sm px-3" to="/register">
+  Register
+</NavLink>
+<NavLink className="btn border-2 border-[#f6cc23] text-[#2E7D32] text-sm px-3 font-semibold" to="/login">
+  Login
+</NavLink>
           </>
         )}
       </div>

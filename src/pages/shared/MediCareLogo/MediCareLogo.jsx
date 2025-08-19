@@ -3,9 +3,9 @@ import logo from '../../../assets/Logo.png'
 
 const MediCareLogo = () => {
     return (
-        <div className='flex'>
-            <img src={logo} alt="Logo" className='h-16 w-16' />
-            <p className='text-sky-600 font-semibold mt-5 text-lg'>MediCare</p>
+        <div className='flex gap-1'>
+            <img src={logo} alt="Logo" className='h-12 w-12' />
+            <p className='text-green-800 font-semibold mt-5 text-lg'>MediCare</p>
         </div>
     );
 };
